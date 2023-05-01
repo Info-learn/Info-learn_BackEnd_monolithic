@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css"/>
+</head>
+<body style="margin: 0;
+        padding: 0;
+        width: 640px;
+        max-width: 640px;">
+<div style='height: 320px;
+        max-height: 320px;
+        padding: 60px 0 0 28px;
+        background: url("https://media.discordapp.net/attachments/969016417582198797/1101144997753008188/a6042dcc85ad286d.png") no-repeat;
+        background-size: cover;'>
+    <img style="padding: 0 0 0 32px; height: 24px;" src="https://media.discordapp.net/attachments/970330761033044019/1101050241450508319/image.png" alt="">
+    <p style='margin: 0;
+        padding: 12px 0 0 32px;
+        font-size: 30px;
+        font-family: "Pretendard SemiBold", sans-serif;
+        font-weight: 600;'>인증번호</p>
+    <div>
+        <div style='
+            float: left;
+            margin: 46px 0 0 32px;
+            background-color: #F2F6F8FF;
+            color: #7D8388;
+            border-radius: 8px;
+            width: 60px;
+            height: 80px;
+            line-height: 80px;
+            font-family: "Pretendard", sans-serif;
+            font-size: 40px;
+            vertical-align: middle;
+            text-align: center;' th:each="i: ${code}" th:text="${i}">1</div>
+    </div>
+</div>
+</body>
+</html>
