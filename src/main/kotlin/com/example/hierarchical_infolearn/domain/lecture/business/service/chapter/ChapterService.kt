@@ -1,7 +1,7 @@
 package com.example.hierarchical_infolearn.domain.lecture.business.service.chapter
 
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.ChangeChapterSequenceRequest
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.CreateChapterRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterSequenceRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.CreateChapterRequest
 
 interface ChapterService {
     fun createChapter(lectureId: String, req: CreateChapterRequest)

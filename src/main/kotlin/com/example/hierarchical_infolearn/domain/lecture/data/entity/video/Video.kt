@@ -1,5 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.data.entity.video
 
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.video.VideoDetailResponse
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.chapter.Chapter
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
@@ -60,5 +61,14 @@ class Video(
 
     fun updateSequence(sequence: Int) {
         this.sequence = sequence
+    }
+
+    fun changeVideo(req: ChangeVideoRequest) {
+        req.title?.let {
+            this.title = it
+        }
+        req.playTime?.let {
+            this.playTime = it
+        }
     }
 }

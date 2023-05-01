@@ -1,7 +1,8 @@
 package com.example.hierarchical_infolearn.domain.lecture.business.service.video
 
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.ChangeVideoSequenceRequest
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.CreateVideoRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoSequenceRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.CreateVideoRequest
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.video.Video
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.chapter.ChapterRepository
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.video.VideoRepository
@@ -99,6 +100,14 @@ class VideoServiceImpl(
         val sequence = videoEntity.sequence
         videoEntity.updateSequence(req.sequence)
         targetVideoEntity.updateSequence(sequence)
+    }
+
+    override fun changeVideo(chapterId: Long, req: ChangeVideoRequest) {
+        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
+        isOwner(chapterEntity.createdBy!!)
+        val videoEntity = videoRepository.findByIdOrNull(req.videoId)?: throw VideoNotFound(req.videoId.toString())
+
+        videoEntity.changeVideo(req)
     }
 
     private fun isOwner(createdBy: String){

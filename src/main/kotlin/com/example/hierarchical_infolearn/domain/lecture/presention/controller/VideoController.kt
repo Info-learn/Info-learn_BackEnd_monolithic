@@ -1,7 +1,8 @@
 package com.example.hierarchical_infolearn.domain.lecture.presention.controller
 
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.ChangeVideoSequenceRequest
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.CreateVideoRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoSequenceRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.CreateVideoRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.service.video.VideoService
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
@@ -63,21 +64,42 @@ class VideoController(
     }
 
     @PutMapping("/{chapter-id}/sequence")
-    @Operation(summary = "챕터 순서 변경", description = "해당 강의의 챕터 순서를 변경합니다",
+    @Operation(summary = "영상 순서 변경", description = "해당 영상의 순서를 변경합니다",
         responses = [
-            ApiResponse(responseCode = "200", description = "챕터 순서가 성공적으로 변경됨"),
+            ApiResponse(responseCode = "200", description = "영상 순서가 성공적으로 변경됨"),
             ApiResponse(responseCode = "403", description = "역할은 교사이지만 작성자가 아님", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
             ApiResponse(responseCode = "404", description = "1. chapterId에 일치하는 챕터를 찾을 수 없음 \n 2. videoId에 일치하는 영상를 찾을 수 없음", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
         ]
     )
     fun changeSequence(
         @PathVariable("chapter-id") chapterId: Long,
+        @Valid
         @RequestBody
         request: ChangeVideoSequenceRequest
     ) {
         videoService.changeVideoSequence(
             chapterId = chapterId,
             req = request
+        )
+    }
+
+    @PutMapping("/{chapter-id}")
+    @Operation(summary = "영상 내용 변경", description = "영상의 제목 또는 재생 시간을 변경합니다",
+        responses = [
+            ApiResponse(responseCode = "200", description = "영상의 제목 또는 재생시간이 성공적으로 변경됨"),
+            ApiResponse(responseCode = "403", description = "역할은 교사이지만 작성자가 아님", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
+            ApiResponse(responseCode = "404", description = "1. chapterId에 일치하는 챕터를 찾을 수 없음 \n 2. videoId에 일치하는 영상를 찾을 수 없음", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
+        ]
+        )
+    fun changeVideo(
+        @PathVariable("chapter-id") chapterId: Long,
+        @Valid
+        @RequestBody
+        request: ChangeVideoRequest
+    ){
+        videoService.changeVideo(
+            chapterId = chapterId,
+            req = request,
         )
     }
 }

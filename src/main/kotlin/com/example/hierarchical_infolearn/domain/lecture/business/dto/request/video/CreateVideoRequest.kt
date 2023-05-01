@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.domain.lecture.business.dto.request
+package com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video
 
 import com.example.hierarchical_infolearn.global.file.dto.VideoFileRequest
 import javax.validation.Valid

@@ -1,7 +1,7 @@
 package com.example.hierarchical_infolearn.domain.lecture.business.service.chapter
 
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.ChangeChapterSequenceRequest
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.CreateChapterRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterSequenceRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.CreateChapterRequest
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.chapter.Chapter
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.chapter.ChapterRepository
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.lecture.LectureRepository

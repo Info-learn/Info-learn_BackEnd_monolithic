@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.data.entity
 
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.ChangeLectureRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.ChangeLectureRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MaxLectureResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MiniLectureResponse
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.chapter.Chapter

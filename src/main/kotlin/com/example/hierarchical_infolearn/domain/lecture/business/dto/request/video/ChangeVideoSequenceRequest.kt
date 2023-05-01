@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.domain.lecture.business.dto.request
+package com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video
 
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min

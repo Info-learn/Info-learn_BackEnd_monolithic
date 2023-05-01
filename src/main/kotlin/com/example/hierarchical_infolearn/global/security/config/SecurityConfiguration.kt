@@ -90,6 +90,7 @@ class SecurityConfiguration(
             //VIDEO
             .antMatchers(HttpMethod.POST, "/api/infolearn/v1/video/{chapter-id}").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.DELETE, "/api/infolearn/v1/video/{chapter-id}").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{chapter-id}").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{lecture-id}/sequence").hasAuthority(Role.TEACHER.name)
             .anyRequest().denyAll()
 

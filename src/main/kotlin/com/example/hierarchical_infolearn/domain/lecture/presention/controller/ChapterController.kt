@@ -1,7 +1,7 @@
 package com.example.hierarchical_infolearn.domain.lecture.presention.controller
 
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.ChangeChapterSequenceRequest
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.CreateChapterRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterSequenceRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.CreateChapterRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.service.chapter.ChapterService
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
 import io.swagger.v3.oas.annotations.Operation

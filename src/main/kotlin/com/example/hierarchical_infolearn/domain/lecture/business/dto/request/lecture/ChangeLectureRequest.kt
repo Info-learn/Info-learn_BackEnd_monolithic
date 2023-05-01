@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.domain.lecture.business.dto.request
+package com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture
 
 import javax.validation.Valid
 import javax.validation.constraints.Pattern
