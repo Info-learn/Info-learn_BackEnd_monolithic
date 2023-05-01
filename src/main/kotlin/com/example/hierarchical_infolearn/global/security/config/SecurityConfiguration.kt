@@ -85,13 +85,16 @@ class SecurityConfiguration(
             //CHAPTER
             .antMatchers(HttpMethod.POST, "/api/infolearn/v1/chapter/{lecture-id}").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.DELETE, "/api/infolearn/v1/chapter/{lecture-id}").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/chapter/{lecture-id}").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/chapter/{lecture-id}/sequence").hasAuthority(Role.TEACHER.name)
 
             //VIDEO
             .antMatchers(HttpMethod.POST, "/api/infolearn/v1/video/{chapter-id}").hasAuthority(Role.TEACHER.name)
-            .antMatchers(HttpMethod.DELETE, "/api/infolearn/v1/video/{chapter-id}").hasAuthority(Role.TEACHER.name)
-            .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{chapter-id}").hasAuthority(Role.TEACHER.name)
-            .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{lecture-id}/sequence").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.DELETE, "/api/infolearn/v1/video/{video-id}").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{video-id}").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{chapter-id}/{sequence}/sequence").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{video-id}/chapter").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.GET, "/api/infolearn/v1/video/{video-id}").authenticated()
             .anyRequest().denyAll()
 
             .and()

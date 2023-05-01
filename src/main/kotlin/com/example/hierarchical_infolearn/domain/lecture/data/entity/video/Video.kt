@@ -2,6 +2,7 @@ package com.example.hierarchical_infolearn.domain.lecture.data.entity.video
 
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.video.VideoDetailResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.video.VideoUrlResponse
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.chapter.Chapter
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
 import org.hibernate.annotations.SQLDelete
@@ -74,6 +75,11 @@ class Video(
 
     fun changeChapter(chapter: Chapter) {
         this.chapter = chapter
+    }
+    fun toVideoUrlResponse(): VideoUrlResponse {
+        return VideoUrlResponse(
+            videoUrl = this.videoUrl!!
+        )
     }
 
 }
