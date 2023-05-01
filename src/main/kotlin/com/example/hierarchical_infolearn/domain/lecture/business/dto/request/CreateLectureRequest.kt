@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.business.dto.request
 
-import com.example.hierarchical_infolearn.global.file.dto.FileRequest
+import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
 import javax.validation.Valid
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
@@ -16,5 +16,5 @@ data class CreateLectureRequest(
     val searchExplanation: String,
     val tagNameList: HashSet<String>,
     @field:Valid
-    val lectureThumbnail: FileRequest
+    val lectureThumbnail: ImageFileRequest
 )

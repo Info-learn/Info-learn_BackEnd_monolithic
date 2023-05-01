@@ -7,7 +7,7 @@ import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.l
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MiniLectureListResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.service.lecture.LectureService
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
-import com.example.hierarchical_infolearn.global.file.dto.FileRequest
+import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -101,7 +101,7 @@ class LectureController(
         @PathVariable("lecture-id") lectureId: String,
         @Valid
         @RequestBody
-        request: FileRequest
+        request: ImageFileRequest
     ):PreSignedUrlResponse {
         return lectureService.changeLectureThumbnail(
             lectureId = lectureId,

@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.domain.user.business.dto.request
 
-import com.example.hierarchical_infolearn.global.file.dto.FileRequest
+import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
@@ -19,5 +19,5 @@ data class TeacherSignUpRequest(
     @field:Size(min = 6, max = 6, message = "교사 코드는 6자리 입니다")
     val teacherCode: String,
     @field:Valid
-    val profileImage: FileRequest?
+    val profileImage: ImageFileRequest?
 )

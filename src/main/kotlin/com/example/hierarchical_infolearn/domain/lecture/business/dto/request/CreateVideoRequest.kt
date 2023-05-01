@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.business.dto.request
 
-import com.example.hierarchical_infolearn.global.file.dto.FileRequest
+import com.example.hierarchical_infolearn.global.file.dto.VideoFileRequest
 import javax.validation.Valid
 import javax.validation.constraints.*
 
@@ -14,5 +14,5 @@ data class CreateVideoRequest(
     @field:Max(30)
     val sequence: Int,
     @field:Valid
-    val videoUrl: FileRequest
+    val videoUrl: VideoFileRequest
 )

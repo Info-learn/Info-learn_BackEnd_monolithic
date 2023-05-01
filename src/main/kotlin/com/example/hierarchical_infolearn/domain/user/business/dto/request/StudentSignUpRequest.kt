@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.domain.user.business.dto.request
 
-import com.example.hierarchical_infolearn.global.file.dto.FileRequest
+import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
@@ -18,5 +18,5 @@ data class StudentSignUpRequest(
     val authCode: String,
     val nickname: String?,
     @field:Valid
-    val profileImage: FileRequest?
+    val profileImage: ImageFileRequest?
 )

@@ -15,7 +15,7 @@ import com.example.hierarchical_infolearn.domain.lecture.exception.IncorrectSear
 import com.example.hierarchical_infolearn.domain.lecture.exception.LectureNotFoundException
 import com.example.hierarchical_infolearn.domain.lecture.exception.LectureTagNotFound
 import com.example.hierarchical_infolearn.global.error.common.NoAuthenticationException
-import com.example.hierarchical_infolearn.global.file.dto.FileRequest
+import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
 import com.example.hierarchical_infolearn.global.utils.CurrentUtil
 import com.example.hierarchical_infolearn.infra.s3.S3Util
@@ -102,7 +102,7 @@ class LectureServiceImpl(
         )
     }
 
-    override fun changeLectureThumbnail(lectureId: String, req: FileRequest): PreSignedUrlResponse {
+    override fun changeLectureThumbnail(lectureId: String, req: ImageFileRequest): PreSignedUrlResponse {
         val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
         isOwner(lectureEntity.createdBy!!)
         val (preSignedUrl, fileUrl) = preSignedUrl(req.fileName, req.contentType, lectureId)
