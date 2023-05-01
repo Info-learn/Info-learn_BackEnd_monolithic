@@ -71,4 +71,9 @@ class Video(
             this.playTime = it
         }
     }
+
+    fun changeChapter(chapter: Chapter) {
+        this.chapter = chapter
+    }
+
 }

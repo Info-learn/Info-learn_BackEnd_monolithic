@@ -1,5 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.business.service.video
 
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoChapterRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoSequenceRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.CreateVideoRequest
@@ -45,7 +46,7 @@ class VideoServiceImpl(
         )
 
 
-        val (preSignedUrl, fileUrl) = preSignedUrl(req.videoUrl.fileName, req.videoUrl.contentType, chapterId, videoEntity.id!!)
+        val (preSignedUrl, fileUrl) = preSignedUrl(req.videoUrl.fileName, req.videoUrl.contentType, chapterEntity.lecture.id ,chapterId, videoEntity.id!!)
 
         videoEntity.uploadVideoUrl(fileUrl)
 
@@ -53,12 +54,12 @@ class VideoServiceImpl(
 
     }
 
-    private fun preSignedUrl(fileName: String, contentType: String, chapterId: Long, videoId: Long): Pair<PreSignedUrlResponse, String>{
+    private fun preSignedUrl(fileName: String, contentType: String, lectureId: String,chapterId: Long, videoId: Long): Pair<PreSignedUrlResponse, String>{
 
         val file = s3Util.getPreSignedUrl(
             fileName,
             contentType,
-            "CHAPTER/$chapterId",
+            "LECTURE/$lectureId/CHAPTER/$chapterId",
             "VIDEO/$videoId"
         )
 
@@ -72,12 +73,11 @@ class VideoServiceImpl(
         return Pair(preSignedUrl, file.fileUrl)
     }
 
-    override fun deleteVideo(chapterId: Long, videoId: Long) {
-        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound(videoId.toString())
+    override fun deleteVideo(chapterId: Long, sequence: Int) {
+        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
+        val videoEntity = videoRepository.findBySequenceAndChapter(sequence, chapterEntity)?: throw VideoNotFound(sequence.toString())
 
         isOwner(videoEntity.createdBy!!)
-
-        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
 
         chapterEntity.videos.firstOrNull{
             !it.isDeleted && it == videoEntity
@@ -86,14 +86,14 @@ class VideoServiceImpl(
         }
     }
 
-    override fun changeVideoSequence(chapterId: Long, req: ChangeVideoSequenceRequest) {
+    override fun changeVideoSequence(sequence: Int, chapterId: Long, req: ChangeVideoSequenceRequest) {
         val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
         isOwner(chapterEntity.createdBy!!)
-        val videoEntity = videoRepository.findByIdOrNull(req.videoId)?: throw VideoNotFound(req.videoId.toString())
+        val videoEntity = videoRepository.findBySequenceAndChapter(sequence, chapterEntity)?: throw VideoNotFound(sequence.toString())
 
         chapterEntity.videos.firstOrNull{
             !it.isDeleted && it == videoEntity
-        }?: IncorrectVideo(req.videoId.toString())
+        }?: IncorrectVideo(sequence.toString())
 
         val targetVideoEntity = videoRepository.findBySequenceAndChapter(req.sequence, chapterEntity)?: throw VideoNotFound(req.sequence.toString())
 
@@ -102,12 +102,23 @@ class VideoServiceImpl(
         targetVideoEntity.updateSequence(sequence)
     }
 
-    override fun changeVideo(chapterId: Long, req: ChangeVideoRequest) {
+    override fun changeVideo(sequence: Int, chapterId: Long, req: ChangeVideoRequest) {
         val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
         isOwner(chapterEntity.createdBy!!)
-        val videoEntity = videoRepository.findByIdOrNull(req.videoId)?: throw VideoNotFound(req.videoId.toString())
-
+        val videoEntity = videoRepository.findBySequenceAndChapter(sequence, chapterEntity)?: throw VideoNotFound(sequence.toString())
         videoEntity.changeVideo(req)
+    }
+
+    override fun changeVideoChapter(sequence: Int, chapterId: Long, req: ChangeVideoChapterRequest) {
+        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
+        isOwner(chapterEntity.createdBy!!)
+        val videoEntity = videoRepository.findBySequenceAndChapter(sequence, chapterEntity)?: throw VideoNotFound(sequence.toString())
+        val targetChapterEntity = chapterRepository.findByIdOrNull(req.targetChapterId)?: throw ChapterNotFoundException(req.targetChapterId.toString())
+        val lastSequence = targetChapterEntity.videos.filter {
+            !it.isDeleted
+        }.size
+        videoEntity.changeChapter(targetChapterEntity)
+        videoEntity.updateSequence(lastSequence + 1)
     }
 
     private fun isOwner(createdBy: String){

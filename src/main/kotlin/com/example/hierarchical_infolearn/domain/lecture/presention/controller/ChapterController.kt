@@ -22,7 +22,7 @@ class ChapterController(
     private val chapterService: ChapterService,
 ) {
 
-    @PostMapping("/{lecture-id}")
+    @PostMapping("")
     @Operation(summary = "챕터 생성하기", description = "해당 강의의 챕터를 생성합니다",
         responses = [
             ApiResponse(responseCode = "201", description = "챕터가 성공적으로 생성돰"),ApiResponse(responseCode = "403", description = "역할은 교사이지만 작성자가 아님", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
@@ -31,13 +31,11 @@ class ChapterController(
         ])
     @ResponseStatus(HttpStatus.CREATED)
     fun createChapter(
-        @PathVariable("lecture-id") lectureId: String,
         @RequestBody
         @Valid
         request: CreateChapterRequest
     ){
         chapterService.createChapter(
-            lectureId = lectureId,
             req = request,
         )
     }

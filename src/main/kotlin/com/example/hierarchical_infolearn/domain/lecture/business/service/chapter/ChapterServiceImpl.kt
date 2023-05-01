@@ -21,8 +21,8 @@ class ChapterServiceImpl(
     private val currentUtil: CurrentUtil,
 ):ChapterService {
 
-    override fun createChapter(lectureId: String, req: CreateChapterRequest) {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
+    override fun createChapter(req: CreateChapterRequest) {
+        val lectureEntity = lectureRepository.findByIdOrNull(req.lectureId)?: throw LectureNotFoundException(req.lectureId)
         isOwner(lectureEntity.createdBy!!)
 
         lectureEntity.chapters.firstOrNull{

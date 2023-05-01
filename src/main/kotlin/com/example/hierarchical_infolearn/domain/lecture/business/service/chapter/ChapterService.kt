@@ -4,7 +4,7 @@ import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.ch
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.CreateChapterRequest
 
 interface ChapterService {
-    fun createChapter(lectureId: String, req: CreateChapterRequest)
+    fun createChapter(req: CreateChapterRequest)
     fun deleteChapter(lectureId: String, chapterId: Long)
     fun changeChapterSequence(lectureId: String, req: ChangeChapterSequenceRequest)
 }
