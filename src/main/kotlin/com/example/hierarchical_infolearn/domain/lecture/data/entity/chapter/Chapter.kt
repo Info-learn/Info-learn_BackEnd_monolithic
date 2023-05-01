@@ -1,5 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.data.entity.chapter
 
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.chapter.ChapterDetailResponse
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.Lecture
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.video.Video
@@ -57,5 +58,11 @@ class Chapter(
 
     fun updateSequence(sequence: Int) {
         this.sequence = sequence
+    }
+
+    fun changeChapter(req: ChangeChapterRequest) {
+        req.title?.let {
+            this.title = it
+        }
     }
 }

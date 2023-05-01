@@ -1,5 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.business.service.chapter
 
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterSequenceRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.CreateChapterRequest
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.chapter.Chapter
@@ -13,8 +14,10 @@ import com.example.hierarchical_infolearn.global.error.common.NoAuthenticationEx
 import com.example.hierarchical_infolearn.global.utils.CurrentUtil
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import javax.transaction.Transactional
 
 @Service
+@Transactional
 class ChapterServiceImpl(
     private val lectureRepository: LectureRepository,
     private val chapterRepository: ChapterRepository,
@@ -66,6 +69,11 @@ class ChapterServiceImpl(
         val sequence = chapterEntity.sequence
         chapterEntity.updateSequence(req.sequence)
         targetChapterEntity.updateSequence(sequence)
+    }
+
+    override fun changeChapter(chapterId: Long, req: ChangeChapterRequest) {
+        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
+        chapterEntity.changeChapter(req)
     }
 
     private fun isOwner(createdBy: String){
