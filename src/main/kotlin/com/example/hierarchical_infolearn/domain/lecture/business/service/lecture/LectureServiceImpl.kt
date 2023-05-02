@@ -3,6 +3,7 @@ package com.example.hierarchical_infolearn.domain.lecture.business.service.lectu
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.ChangeLectureRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.CreateLectureRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureIdResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureSearchResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MaxLectureResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MiniLectureListResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameListResponse
@@ -12,7 +13,6 @@ import com.example.hierarchical_infolearn.domain.lecture.data.entity.tag.TagUsag
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.lecture.LectureRepository
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.tag.LectureTagRepository
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.tag.LectureTagUsageRepository
-import com.example.hierarchical_infolearn.domain.lecture.exception.IncorrectSearchType
 import com.example.hierarchical_infolearn.domain.lecture.exception.LectureNotFoundException
 import com.example.hierarchical_infolearn.domain.lecture.exception.LectureTagNotFound
 import com.example.hierarchical_infolearn.global.error.common.NoAuthenticationException
@@ -90,16 +90,17 @@ class LectureServiceImpl(
         )
     }
 
-    override fun searchLectureList(q: String, type: String, idx: Int, size: Int): MiniLectureListResponse {
-        val searchList = when (type) {
-            "title" -> lectureRepository.findBySearchTitleContaining(q, PageRequest.of(idx, size))?: throw LectureNotFoundException(q)
-            "explanation" -> lectureRepository.findBySearchExplanationContaining(q, PageRequest.of(idx, size))?: throw LectureNotFoundException(q)
-            else -> throw IncorrectSearchType(type)
-        }
-        return MiniLectureListResponse(
-            searchList.content.map {
+    override fun searchLectureList(q: String, idx: Int, size: Int): LectureSearchResponse {
+        val titleResultEntities = lectureRepository.findBySearchTitleContaining(q, PageRequest.of(idx, size))?: throw LectureNotFoundException(q)
+        val explanationResultEntities = lectureRepository.findBySearchExplanationContaining(q, PageRequest.of(idx, size))?: throw LectureNotFoundException(q)
+
+        return LectureSearchResponse(
+            titleResults = titleResultEntities.map {
+                    it.toMiniLectureResponse()
+                }.toList(),
+            explanationResults = explanationResultEntities.map {
                 it.toMiniLectureResponse()
-            }
+            }.toList()
         )
     }
 

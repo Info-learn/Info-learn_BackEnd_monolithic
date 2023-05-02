@@ -81,6 +81,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.DELETE,"/api/infolearn/v1/lecture/{lecture-id}").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.PUT,"/api/infolearn/v1/lecture/{lecture-id}/tag").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.DELETE,"/api/infolearn/v1/lecture/{lecture-id}/tag").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.GET,"/api/infolearn/v1/lecture/tag").authenticated()
 
             //CHAPTER
             .antMatchers(HttpMethod.POST, "/api/infolearn/v1/chapter/{lecture-id}").hasAuthority(Role.TEACHER.name)

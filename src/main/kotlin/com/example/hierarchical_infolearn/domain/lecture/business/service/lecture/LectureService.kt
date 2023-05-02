@@ -3,6 +3,7 @@ package com.example.hierarchical_infolearn.domain.lecture.business.service.lectu
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.ChangeLectureRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.CreateLectureRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureIdResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureSearchResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MaxLectureResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MiniLectureListResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameListResponse
@@ -14,7 +15,7 @@ interface LectureService {
     fun createLecture(req: CreateLectureRequest): LectureIdResponse
     fun getLecture(lectureId: String): MaxLectureResponse
     fun getLectureList(time: LocalDateTime?, limit: Long): MiniLectureListResponse
-    fun searchLectureList(q: String, type: String, idx: Int, size: Int): MiniLectureListResponse
+    fun searchLectureList(q: String, idx: Int, size: Int): LectureSearchResponse
     fun changeLectureThumbnail(lectureId: String, req: ImageFileRequest): PreSignedUrlResponse
     fun changeLecture(lectureId: String, req: ChangeLectureRequest)
     fun addLectureTag(lectureId: String, tagId: String)

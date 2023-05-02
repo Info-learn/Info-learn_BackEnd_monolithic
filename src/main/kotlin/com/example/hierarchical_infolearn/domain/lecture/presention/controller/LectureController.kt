@@ -3,6 +3,7 @@ package com.example.hierarchical_infolearn.domain.lecture.presention.controller
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.ChangeLectureRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.CreateLectureRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureIdResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureSearchResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MaxLectureResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MiniLectureListResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameListResponse
@@ -77,19 +78,17 @@ class LectureController(
     @GetMapping("/search")
     @Operation(summary = "강의를 검색합니다", description = "강의 제목과 설명을 기반으로 검색합니다",
         responses = [
-            ApiResponse(responseCode = "200", description = "성공적으로 검색함", content = [Content(schema = Schema(implementation = MiniLectureListResponse::class))]),
-            ApiResponse(responseCode = "400", description = "SearchType은 title과 explanation 두 개가 존재함", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
+            ApiResponse(responseCode = "200", description = "성공적으로 검색함" , content = [Content(schema = Schema(implementation = LectureSearchResponse::class))]),
             ApiResponse(responseCode = "404", description = "lectureId에 일치하는 강의를 찾을 수 없음", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
         ]
         )
     fun searchLecture(
         @Pattern(regexp = "^[a-zA-Z0-9!@#\$%^&*()_+\\-=\\[\\]{}|;':\",./<>?\\s]{1,200}\$", message = "query는 영문자이며 1 ~ 200자이여야 합니다")
         @RequestParam(required = true) q: String,
-        @RequestParam(required = false, defaultValue = "title") type: String,
         @RequestParam(required = false, defaultValue = "0") idx: Int,
         @RequestParam(required = false, defaultValue = "10") size: Int,
-    ): MiniLectureListResponse {
-        return lectureService.searchLectureList(q, type ,idx, size)
+    ): LectureSearchResponse {
+        return lectureService.searchLectureList(q, idx, size)
     }
 
     @PutMapping("/{lecture-id}/thumbnail")
