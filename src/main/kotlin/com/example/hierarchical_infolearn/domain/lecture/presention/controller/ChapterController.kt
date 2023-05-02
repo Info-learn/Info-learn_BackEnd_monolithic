@@ -85,6 +85,7 @@ class ChapterController(
         responses = [
             ApiResponse(responseCode = "200", description = "챕터의 이름이 성공적으로 변경됨"),
             ApiResponse(responseCode = "403", description = "역할은 교사이지만 작성자가 아님", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
+            ApiResponse(responseCode = "404", description = "1. chapterId에 일치하는 챕터를 찾을 수 없음", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
         ]
     )
     fun changeChapter(

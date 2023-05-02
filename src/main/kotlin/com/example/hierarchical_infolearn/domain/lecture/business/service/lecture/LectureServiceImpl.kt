@@ -5,6 +5,7 @@ import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.le
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureIdResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MaxLectureResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MiniLectureListResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameListResponse
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.Lecture
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.tag.Tag
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.tag.TagUsage
@@ -155,7 +156,7 @@ class LectureServiceImpl(
                 lectureEntity,
             )
         )
-
+        lectureTagEntity.increaseUsageCount()
     }
 
     override fun deleteLectureTag(lectureId: String, tagId: String) {
@@ -163,13 +164,22 @@ class LectureServiceImpl(
 
         isOwner(lectureEntity.createdBy!!)
 
-        val tag = lectureTagRepository.findByIdOrNull(tagId)?: throw LectureTagNotFound(tagId)
+        val lectureTagEntity = lectureTagRepository.findByIdOrNull(tagId)?: throw LectureTagNotFound(tagId)
 
         lectureEntity.tagUsageList.firstOrNull{
-            it.tag == tag
+            it.tag == lectureTagEntity
         }?.let {
-            lectureTagUsageRepository.deleteByLectureAndTag(lectureEntity, tag)
+            lectureTagUsageRepository.deleteByLectureAndTag(lectureEntity, lectureTagEntity)
+            lectureTagEntity.decreaseUsageCount()
         }
+    }
+
+    override fun getLectureTag(usageCount: Long?, limit: Long): TagNameListResponse {
+        val lectureTagEntities = lectureTagRepository.queryAllLectureTagNoOffset(usageCount, limit)?: throw LectureTagNotFound(usageCount.toString())
+
+        return TagNameListResponse(lectureTagEntities.map {
+            it.toTagResponse()
+        })
     }
 
     private fun isOwner(createdBy: String){

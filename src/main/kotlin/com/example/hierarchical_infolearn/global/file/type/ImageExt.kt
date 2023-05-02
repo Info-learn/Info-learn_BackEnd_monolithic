@@ -7,5 +7,4 @@ enum class ImageExt(
     JPG("jpg", "image/jpeg"),
     JPEG("jpeg", "image/jpeg"),
     PNG("png", "image/png"),
-    GIF("gif", "image/gif")
 }

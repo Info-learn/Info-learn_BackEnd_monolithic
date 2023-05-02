@@ -5,6 +5,7 @@ import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.le
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureIdResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MaxLectureResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MiniLectureListResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameListResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.service.lecture.LectureService
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
 import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
@@ -137,6 +138,7 @@ class LectureController(
     fun addLectureTag(
         @PathVariable("lecture-id") lectureId: String,
         @Valid
+        @Pattern(regexp = "^\\S+\$", message = "tag는 띄어쓰기가 안됩니다")
         @Size(min = 1, max = 20, message = "tag의 길이는 1~20자 입니다")
         @RequestParam(required = true) tag: String,
     ){
@@ -155,6 +157,7 @@ class LectureController(
     fun deleteLectureTag(
         @PathVariable("lecture-id") lectureId: String,
         @Valid
+        @Pattern(regexp = "^\\S+\$", message = "tag는 띄어쓰기가 안됩니다")
         @Size(min = 1, max = 20, message = "tag의 길이는 1~20자 입니다")
         @RequestParam(required = true) tag: String,
     ){
@@ -174,5 +177,24 @@ class LectureController(
     ){
       lectureService.deleteLecture(lectureId)
     }
+
+    @GetMapping("/tag")
+    @Operation(
+        summary = "전체 태그 불러오기", description = "list의 마지막에 존재하는 태그의 tagUsage을 입력받아 사용이 많이 된 순으로 태그를 불러옵니다",
+        responses = [
+            ApiResponse(responseCode = "200", description = "태그를 성공적으로 불러옴", content = [Content(schema = Schema(implementation = TagNameListResponse::class))]),
+            ApiResponse(responseCode = "404", description = "태그를 찾을 수 없음", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
+        ]
+    )
+    fun getLectureTag(
+        @RequestParam(required = false) usageCount: Long?,
+        @RequestParam(required = true) limit: Long,
+    ): TagNameListResponse {
+        return lectureService.getLectureTag(
+            usageCount = usageCount,
+            limit = limit
+        )
+    }
+
 
 }

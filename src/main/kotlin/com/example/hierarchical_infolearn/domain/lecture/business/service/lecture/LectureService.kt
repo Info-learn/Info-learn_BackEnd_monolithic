@@ -5,6 +5,7 @@ import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.le
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureIdResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MaxLectureResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MiniLectureListResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameListResponse
 import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
 import java.time.LocalDateTime
@@ -19,4 +20,5 @@ interface LectureService {
     fun addLectureTag(lectureId: String, tagId: String)
     fun deleteLecture(lectureId: String)
     fun deleteLectureTag(lectureId: String, tagId: String)
+    fun getLectureTag(usageCount: Long?, limit: Long): TagNameListResponse
 }

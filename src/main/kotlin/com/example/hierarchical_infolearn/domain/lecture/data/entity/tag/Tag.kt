@@ -1,5 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.data.entity.tag
 
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameListResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameResponse
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
 import javax.persistence.*
@@ -25,6 +26,19 @@ class Tag(
     fun toTagNameResponse(): TagNameResponse {
         return TagNameResponse(
             this.id,
+        )
+    }
+    fun increaseUsageCount() {
+        this.usageCount += 1
+    }
+    fun decreaseUsageCount() {
+        this.usageCount -= 1
+    }
+
+    fun toTagResponse(): TagNameListResponse.TagResponse{
+        return TagNameListResponse.TagResponse(
+            name = this.id,
+            usageCount = this.usageCount
         )
     }
 }
