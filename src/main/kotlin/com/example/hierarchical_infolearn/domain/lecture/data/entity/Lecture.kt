@@ -11,7 +11,10 @@ import org.hibernate.annotations.Where
 import javax.persistence.*
 
 @Entity(name = "tbl_lecture")
-@Table(name = "tbl_lecture")
+@Table(name = "tbl_lecture", indexes = [
+    Index(name = "i_search_title", columnList = "search_title"),
+    Index(name = "i_search_explanation", columnList = "search_explanation")
+    ])
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE `tbl_lecture` SET is_deleted = true WHERE id = ?")
 class Lecture(

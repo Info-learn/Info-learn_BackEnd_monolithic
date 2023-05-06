@@ -8,15 +8,15 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document(collection = "content")
 class Content(
     id: ObjectId,
-    tilId: Long,
+    tilId: String,
     content: String
-
 ) {
     @Id
     var id: ObjectId = id
         protected set
 
     @Field
-    val tilId: Long = tilId
+    val tilId: String = tilId
 
+    var content: String = content
 }

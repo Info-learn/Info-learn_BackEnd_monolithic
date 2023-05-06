@@ -36,12 +36,12 @@ class LectureServiceImpl(
     private val s3Util: S3Util,
     private val currentUtil: CurrentUtil,
 ):LectureService {
-
     override fun createLecture(req: CreateLectureRequest): LectureIdResponse {
 
+        val tagId = UUID.randomUUID().toString()
         val lectureEntity = lectureRepository.save(
             Lecture(
-                id = UUID.randomUUID().toString(),
+                id = tagId,
                 title = req.title,
                 explanation = req.explanation,
                 searchTitle = req.searchTitle,
@@ -55,22 +55,24 @@ class LectureServiceImpl(
 
         lectureEntity.uploadLectureThumbnail(fileUrl)
 
-        req.tagNameList.map {
+        req.tagNameList.forEach {
 
-            val tag = lectureTagRepository.findByIdOrNull(it) ?: lectureTagRepository.save(
+            val tagEntity = lectureTagRepository.findByIdOrNull(it) ?: lectureTagRepository.save(
                 Tag(
                     it
                 )
             )
+
             lectureTagUsageRepository.save(
                 TagUsage(
-                    tag,
-                    lectureEntity
+                    tagEntity,
+                    lectureEntity,
                 )
             )
+            tagEntity.increaseUsageCount()
         }
 
-        return LectureIdResponse(lectureEntity.id,preSignedUrl)
+        return LectureIdResponse(tagId, preSignedUrl)
     }
 
 
@@ -97,10 +99,10 @@ class LectureServiceImpl(
         return LectureSearchResponse(
             titleResults = titleResultEntities.map {
                     it.toMiniLectureResponse()
-                }.toList(),
+                },
             explanationResults = explanationResultEntities.map {
                 it.toMiniLectureResponse()
-            }.toList()
+            }
         )
     }
 

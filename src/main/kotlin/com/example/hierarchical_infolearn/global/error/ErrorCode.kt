@@ -45,4 +45,6 @@ enum class ErrorCode(
     VIDEO_NOT_FOUND("Video Not Found", HttpStatus.NOT_FOUND),
     INCORRECT_VIDEO("Incorrect Video", HttpStatus.BAD_REQUEST),
 
+    //TIL
+    TIL_NOT_FOUND("Til Not Found", HttpStatus.NOT_FOUND),
 }
