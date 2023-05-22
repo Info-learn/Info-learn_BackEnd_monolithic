@@ -21,6 +21,7 @@ import com.example.hierarchical_infolearn.infra.s3.S3Util
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class AuthServiceImpl(
@@ -59,7 +60,7 @@ class AuthServiceImpl(
 
         req.profileImage?.let {
 
-            val (preSignedUrl, file) = preSignedUrl(Role.STUDENT, it.fileName, it.contentType, req.accountId)
+            val (preSignedUrl, file) = preSignedUrl(Role.STUDENT, it.fileName, it.contentType,it.fileSize ,req.accountId)
 
             studentEntity.uploadProfileImage(
                 file
@@ -87,7 +88,7 @@ class AuthServiceImpl(
 
         req.profileImage?.let {
 
-            val (preSignedUrl, file) = preSignedUrl(Role.TEACHER, it.fileName, it.contentType, req.accountId)
+            val (preSignedUrl, file) = preSignedUrl(Role.TEACHER, it.fileName, it.contentType, it.fileSize,req.accountId)
 
             teacherEntity.uploadProfileImage(
                file
@@ -97,11 +98,12 @@ class AuthServiceImpl(
         return null
     }
 
-    private fun preSignedUrl(type: Role, fileName: String, contentType: String, accountId: String): Pair<PreSignedUrlResponse, String>{
+    private fun preSignedUrl(type: Role, fileName: String, contentType: String, fileSize: Long,accountId: String): Pair<PreSignedUrlResponse, String>{
 
         val file = s3Util.getPreSignedUrl(
             fileName,
             contentType,
+            fileSize,
             "${type.name}/${accountId}",
             "PROFILE_IMAGE"
         )
@@ -135,8 +137,8 @@ class AuthServiceImpl(
         val user = userRepository.findByIdOrNull(req.accountId) ?: throw UserNotFoundException(req.accountId)
 
         if(!passwordEncoder.matches(req.password, user.password)) throw IncorrectPassword(req.password)
-
-        val response = tokenProvider.encode(user.accountId, user.role.name)
+        val tokenUUID = UUID.randomUUID().toString()
+        val response = tokenProvider.encode(user.accountId, user.role.name, tokenUUID)
         refreshTokenRepository.findByIdOrNull(user.accountId)?.reset(response.refreshToken)
             ?: RefreshToken(
                 user.accountId,

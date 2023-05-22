@@ -18,13 +18,13 @@ class S3Util(
     private val presigner: S3Presigner,
 ) {
 
-    fun getPreSignedUrl(originalFileName: String, contentType: String, rootPathName: String, middlePathName: String): FileDto {
+    fun getPreSignedUrl(originalFileName: String, contentType: String, fileSize: Long, rootPathName: String,middlePathName: String): FileDto {
         val fileName = getFileName(rootPathName, middlePathName, originalFileName)
         val ext = getExt(originalFileName)
         val fileType = getFileType(contentType, ext)
 
 
-        val presignedURL = getGeneratePreSignedUrlRequest(fileName, contentType)
+        val presignedURL = getGeneratePreSignedUrlRequest(fileName, contentType, fileSize)
 
         return FileDto(
             presignedURL,
@@ -56,16 +56,17 @@ class S3Util(
         return fileType
     }
 
-    private fun getGeneratePreSignedUrlRequest(fileName: String, contentType: String): String {
+    private fun getGeneratePreSignedUrlRequest(fileName: String, contentType: String, fileSize: Long): String {
 
         val objectRequest = PutObjectRequest.builder()
             .bucket(s3Property.bucketName)
             .key(fileName)
             .contentType(contentType)
+            .contentLength(fileSize)
             .build()
 
         val presignRequest = PutObjectPresignRequest.builder()
-            .signatureDuration(Duration.ofMinutes(2))
+            .signatureDuration(Duration.ofMinutes(1))
             .putObjectRequest(objectRequest)
             .build()
 

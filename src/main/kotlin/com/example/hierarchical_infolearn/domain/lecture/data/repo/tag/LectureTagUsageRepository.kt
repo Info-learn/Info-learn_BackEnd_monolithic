@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface LectureTagUsageRepository: JpaRepository<TagUsage, TagUsageIdClass> {
 
-
+    fun existsByLectureAndTag(lecture: Lecture, tag: Tag): Boolean
     fun deleteByLectureAndTag(lecture: Lecture, tag: Tag)
 
 }

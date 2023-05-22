@@ -15,22 +15,25 @@ import java.util.*
 class TokenProvider(
     private val jwtProperty: JwtProperty,
 ) {
-    fun encode(accountId: String, role: String): TokenResponse {
+    fun encode(accountId: String, role: String, tokenUUID: String): TokenResponse {
+        val accessToken = Jwts.builder()
+            .signWith(SignatureAlgorithm.HS256, jwtProperty.secretKey)
+            .setSubject(role)
+            .setId(accountId)
+            .claim("type", "access")
+            .setIssuedAt(Date())
+            .setExpiration(Date(Date().time + (jwtProperty.accessExpiredAt * 1000)))
+            .compact() /*+ ".${tokenUUID}"*/
+        val refreshToken = Jwts.builder()
+            .signWith(SignatureAlgorithm.HS256, jwtProperty.secretKey)
+            .claim("type", "refresh")
+            .setIssuedAt(Date())
+            .setExpiration(Date(Date().time + (jwtProperty.refreshExpiredAt * 1000)))
+            .compact()
+
         return TokenResponse(
-            Jwts.builder()
-                .signWith(SignatureAlgorithm.HS256, jwtProperty.secretKey)
-                .setSubject(role)
-                .setId(accountId)
-                .claim("type", "access")
-                .setIssuedAt(Date())
-                .setExpiration(Date(Date().time + (jwtProperty.accessExpiredAt * 1000)))
-                .compact(),
-            Jwts.builder()
-                .signWith(SignatureAlgorithm.HS256, jwtProperty.secretKey)
-                .claim("type", "refresh")
-                .setIssuedAt(Date())
-                .setExpiration(Date(Date().time + (jwtProperty.refreshExpiredAt * 1000)))
-                .compact()
+            accessToken,
+            refreshToken
         )
     }
 

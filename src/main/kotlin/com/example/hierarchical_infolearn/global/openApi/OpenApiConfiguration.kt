@@ -44,4 +44,12 @@ class OpenApiConfiguration {
             .pathsToMatch("/api/infolearn/v1/video/**")
             .build()
     }
+
+    @Bean
+    fun tilOpenApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("til")
+            .pathsToMatch("/api/infolearn/v1/til/**")
+            .build()
+    }
 }

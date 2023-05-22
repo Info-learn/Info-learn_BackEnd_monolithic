@@ -2,6 +2,7 @@ package com.example.hierarchical_infolearn.domain.lecture.business.service.lectu
 
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.ChangeLectureRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.CreateLectureRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.LectureTagRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureIdResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureSearchResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MaxLectureResponse
@@ -15,6 +16,7 @@ import com.example.hierarchical_infolearn.domain.lecture.data.repo.tag.LectureTa
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.tag.LectureTagUsageRepository
 import com.example.hierarchical_infolearn.domain.lecture.exception.LectureNotFoundException
 import com.example.hierarchical_infolearn.domain.lecture.exception.LectureTagNotFound
+import com.example.hierarchical_infolearn.domain.lecture.exception.TooManyLectureTag
 import com.example.hierarchical_infolearn.global.error.common.NoAuthenticationException
 import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
@@ -50,7 +52,7 @@ class LectureServiceImpl(
         )
 
         val (preSignedUrl, fileUrl) = preSignedUrl(req.lectureThumbnail.fileName, req.lectureThumbnail.contentType,
-            lectureEntity.id
+            lectureEntity.id, req.lectureThumbnail.fileSize
         )
 
         lectureEntity.uploadLectureThumbnail(fileUrl)
@@ -78,7 +80,7 @@ class LectureServiceImpl(
 
     override fun getLecture(lectureId: String): MaxLectureResponse {
         val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
-        return lectureEntity.toLectureDetailResponse()
+        return lectureEntity.toLectureDetailResponse(currentUtil.getCurrentUser().accountId)
     }
 
     override fun getLectureList(time: LocalDateTime?, limit: Long): MiniLectureListResponse {
@@ -109,18 +111,19 @@ class LectureServiceImpl(
     override fun changeLectureThumbnail(lectureId: String, req: ImageFileRequest): PreSignedUrlResponse {
         val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
         isOwner(lectureEntity.createdBy!!)
-        val (preSignedUrl, fileUrl) = preSignedUrl(req.fileName, req.contentType, lectureId)
+        val (preSignedUrl, fileUrl) = preSignedUrl(req.fileName, req.contentType, lectureId, req.fileSize)
 
         lectureEntity.uploadLectureThumbnail(fileUrl)
 
         return preSignedUrl
     }
 
-    private fun preSignedUrl( fileName: String, contentType: String, lectureId: String): Pair<PreSignedUrlResponse, String>{
+    private fun preSignedUrl( fileName: String, contentType: String, lectureId: String, fileSize: Long): Pair<PreSignedUrlResponse, String>{
 
         val file = s3Util.getPreSignedUrl(
             fileName,
             contentType,
+            fileSize,
             "LECTURE/$lectureId",
             "THUMBNAIL"
         )
@@ -147,33 +150,42 @@ class LectureServiceImpl(
         lectureRepository.delete(lectureEntity)
     }
 
-    override fun addLectureTag(lectureId: String, tagId: String) {
+    override fun addLectureTag(lectureId: String, req: List<LectureTagRequest>) {
         val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
         isOwner(lectureEntity.createdBy!!)
-        val lectureTagEntity = lectureTagRepository.findByIdOrNull(tagId)?: lectureTagRepository.save(Tag(tagId))
-        lectureEntity.tagUsageList.firstOrNull{
-            it.tag == lectureTagEntity
-        }?: lectureTagUsageRepository.save(
-            TagUsage(
-                lectureTagEntity,
-                lectureEntity,
-            )
-        )
-        lectureTagEntity.increaseUsageCount()
+
+        val tagCount = lectureEntity.tagUsageList.size + req.size
+
+        if(tagCount > 10) throw TooManyLectureTag(tagCount.toString())
+
+        req.forEach {
+            val lectureTagEntity = lectureTagRepository.findByIdOrNull(it.tagId)?: lectureTagRepository.save(Tag(it.tagId))
+            if (!lectureTagUsageRepository.existsByLectureAndTag(lectureEntity, lectureTagEntity)) {
+                lectureTagUsageRepository.save(
+                    TagUsage(
+                        lectureTagEntity,
+                        lectureEntity,
+                    )
+                )
+                lectureTagEntity.increaseUsageCount()
+            }
+        }
     }
 
-    override fun deleteLectureTag(lectureId: String, tagId: String) {
+    override fun deleteLectureTag(lectureId: String, req: List<LectureTagRequest>) {
         val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
 
         isOwner(lectureEntity.createdBy!!)
 
-        val lectureTagEntity = lectureTagRepository.findByIdOrNull(tagId)?: throw LectureTagNotFound(tagId)
+        req.forEach {
+            val lectureTagEntity = lectureTagRepository.findByIdOrNull(it.tagId)?: throw LectureTagNotFound(it.tagId)
 
-        lectureEntity.tagUsageList.firstOrNull{
-            it.tag == lectureTagEntity
-        }?.let {
-            lectureTagUsageRepository.deleteByLectureAndTag(lectureEntity, lectureTagEntity)
-            lectureTagEntity.decreaseUsageCount()
+            lectureEntity.tagUsageList.firstOrNull{ it1 ->
+                it1.tag == lectureTagEntity
+            }?.let {
+                lectureTagUsageRepository.deleteByLectureAndTag(lectureEntity, lectureTagEntity)
+                lectureTagEntity.decreaseUsageCount()
+            }
         }
     }
 

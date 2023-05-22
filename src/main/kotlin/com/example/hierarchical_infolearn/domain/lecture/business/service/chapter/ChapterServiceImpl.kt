@@ -8,7 +8,7 @@ import com.example.hierarchical_infolearn.domain.lecture.data.repo.chapter.Chapt
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.lecture.LectureRepository
 import com.example.hierarchical_infolearn.domain.lecture.exception.AlreadyUsingSequence
 import com.example.hierarchical_infolearn.domain.lecture.exception.ChapterNotFoundException
-import com.example.hierarchical_infolearn.domain.lecture.exception.IncorrectChapter
+import com.example.hierarchical_infolearn.domain.lecture.exception.DuplicationSequenceException
 import com.example.hierarchical_infolearn.domain.lecture.exception.LectureNotFoundException
 import com.example.hierarchical_infolearn.global.error.common.NoAuthenticationException
 import com.example.hierarchical_infolearn.global.utils.CurrentUtil
@@ -58,17 +58,17 @@ class ChapterServiceImpl(
     override fun changeChapterSequence(lectureId: String, req: ChangeChapterSequenceRequest) {
         val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
         isOwner(lectureEntity.createdBy!!)
-        val chapterEntity = chapterRepository.findByIdOrNull(req.chapterId)?: throw ChapterNotFoundException(req.chapterId.toString())
 
-        lectureEntity.chapters.firstOrNull{
-            !it.isDeleted && it == chapterEntity
-        }?: IncorrectChapter(req.chapterId.toString())
+        val duplicationChecker = req.chapterSequences.map {
+            it.sequence
+        }.toSet()
 
-        val targetChapterEntity = chapterRepository.findBySequenceAndLecture(req.sequence, lectureEntity)?: throw ChapterNotFoundException(req.sequence.toString())
+        if (duplicationChecker.size != req.chapterSequences.size) throw DuplicationSequenceException(req.chapterSequences.size.toString())
 
-        val sequence = chapterEntity.sequence
-        chapterEntity.updateSequence(req.sequence)
-        targetChapterEntity.updateSequence(sequence)
+        req.chapterSequences.forEach {
+            val chapterEntity = chapterRepository.findByIdAndLecture(it.chapterId, lectureEntity)?: throw ChapterNotFoundException(it.chapterId.toString())
+            chapterEntity.updateSequence(it.sequence)
+        }
     }
 
     override fun changeChapter(chapterId: Long, req: ChangeChapterRequest) {

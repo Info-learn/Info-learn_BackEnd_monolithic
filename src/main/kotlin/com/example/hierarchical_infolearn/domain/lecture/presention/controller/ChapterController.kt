@@ -71,6 +71,7 @@ class ChapterController(
     fun changeSequence(
         @PathVariable("lecture-id") lectureId: String,
         @RequestBody
+        @Valid
         request: ChangeChapterSequenceRequest
     ) {
         chapterService.changeChapterSequence(
@@ -90,8 +91,8 @@ class ChapterController(
     )
     fun changeChapter(
         @PathVariable("chapter-id") chapterId: Long,
-        @Valid
         @RequestBody
+        @Valid
         request: ChangeChapterRequest,
     ){
         chapterService.changeChapter(

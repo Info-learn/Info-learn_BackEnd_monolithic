@@ -12,6 +12,6 @@ data class CreateChapterRequest(
     @field:Size(min = 1, max = 100, message = "챕터 제목은 1~100자이여야 합니다")
     val title: String,
     @field:Min(1)
-    @field:Max(30)
+    @field:Max(25)
     val sequence: Int,
 )

@@ -74,7 +74,7 @@ class SecurityConfiguration(
             //LECTURE
             .antMatchers(HttpMethod.POST, "/api/infolearn/v1/lecture").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.GET, "/api/infolearn/v1/lecture").authenticated()
-            .antMatchers(HttpMethod.GET,"/api/infolearn/v1/lecture/{{lecture-id}").authenticated()
+            .antMatchers(HttpMethod.GET,"/api/infolearn/v1/lecture/{lecture-id}").authenticated()
             .antMatchers(HttpMethod.GET,"/api/infolearn/v1/lecture/search").authenticated()
             .antMatchers(HttpMethod.PUT,"/api/infolearn/v1/lecture/{lecture-id}").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.PUT,"/api/infolearn/v1/lecture/{lecture-id}/thumbnail").hasAuthority(Role.TEACHER.name)
@@ -84,7 +84,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET,"/api/infolearn/v1/lecture/tag").authenticated()
 
             //CHAPTER
-            .antMatchers(HttpMethod.POST, "/api/infolearn/v1/chapter/{lecture-id}").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.POST, "/api/infolearn/v1/chapter").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.DELETE, "/api/infolearn/v1/chapter/{lecture-id}").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/chapter/{lecture-id}").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/chapter/{lecture-id}/sequence").hasAuthority(Role.TEACHER.name)
@@ -95,7 +95,12 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{video-id}").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{chapter-id}/{sequence}/sequence").hasAuthority(Role.TEACHER.name)
             .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{video-id}/chapter").hasAuthority(Role.TEACHER.name)
+            .antMatchers(HttpMethod.PUT, "/api/infolearn/v1/video/{video-id}/complete").authenticated()
             .antMatchers(HttpMethod.GET, "/api/infolearn/v1/video/{video-id}").authenticated()
+
+            //TIL
+            .antMatchers(HttpMethod.POST, "/api/infolearn/v1/til").authenticated()
+            .antMatchers(HttpMethod.POST, "/api/infolearn/v1/til/image").authenticated()
             .anyRequest().denyAll()
 
             .and()

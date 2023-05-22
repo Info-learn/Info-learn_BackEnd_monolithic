@@ -2,8 +2,9 @@ package com.example.hierarchical_infolearn.domain.lecture.data.entity.video
 
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.video.VideoDetailResponse
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.video.VideoUrlResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.video.VideoMaxResponse
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.chapter.Chapter
+import com.example.hierarchical_infolearn.domain.lecture.data.entity.video.status.VideoStatus
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
@@ -47,13 +48,22 @@ class Video(
     @JoinColumn(name = "chapter_id")
     var chapter: Chapter = chapter
 
-    fun toVideoDetailResponse(): VideoDetailResponse {
+    @OneToMany(mappedBy = "video", cascade = [CascadeType.REMOVE])
+    var videoStatus: MutableSet<VideoStatus> = HashSet()
+        protected set
+
+    fun toVideoDetailResponse(userId: String): VideoDetailResponse {
         return VideoDetailResponse(
             videoId = this.id!!,
             title = this.title,
-            playTime = this.playTime,
-            sequence = this.sequence
-        )
+            sequence = this.sequence,
+            hour = this.playTime / 3600,
+            minute = (this.playTime % 3600) / 60,
+            second = this.playTime % 60,
+            status = videoStatus.firstOrNull{
+                it.createdBy == userId
+            }?.status
+            )
     }
 
     fun uploadVideoUrl(file: String) {
@@ -76,8 +86,17 @@ class Video(
     fun changeChapter(chapter: Chapter) {
         this.chapter = chapter
     }
-    fun toVideoUrlResponse(): VideoUrlResponse {
-        return VideoUrlResponse(
+    fun toVideoUrlResponse(userId: String): VideoMaxResponse {
+        return VideoMaxResponse(
+            videoId = this.id!!,
+            title = this.title,
+            sequence = this.sequence,
+            hour = this.playTime / 3600,
+            minute = (this.playTime % 3600) / 60,
+            second = this.playTime % 60,
+            status = videoStatus.firstOrNull{
+                        it.createdBy == userId
+                    }?.status,
             videoUrl = this.videoUrl!!
         )
     }

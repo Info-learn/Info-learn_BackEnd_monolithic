@@ -13,7 +13,6 @@ class TeacherDetailsService (
 ): UserDetailsService{
     override fun loadUserByUsername(accountId: String): UserDetails {
         if(!teacherRepository.existsById(accountId)) throw UserNotFoundException(accountId)
-        println(accountId)
         return TeacherDetails(accountId)
     }
 

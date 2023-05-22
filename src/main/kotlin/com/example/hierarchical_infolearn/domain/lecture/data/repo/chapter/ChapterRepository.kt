@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface ChapterRepository: JpaRepository<Chapter,Long> {
 
     fun findBySequenceAndLecture(sequence: Int, lecture: Lecture): Chapter?
-
+    fun findByIdAndLecture(id: Long, lecture: Lecture): Chapter?
 }

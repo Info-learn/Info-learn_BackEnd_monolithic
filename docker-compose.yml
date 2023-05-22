@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  infolearn:
+      container_name: infolearn-app
+      image: infolearn
+      restart: always
+      networks:
+        - mysql-network
+        - redis-network
+      environment:
+        INFOLEARN_DB_URL: jdbc:mysql://infolearn-mysql:3306/infolearn
+        INFOLEARN_DB_USERNAME: "root"
+        INFOLEARN_DB_PASSWORD: "smddlwhgdk"
+        REDIS_HOST: redis
+        REDIS_PORT: 6379
+      ports:
+        - "8080:8080"
+      depends_on:
+        - infolearn-mysql
+        - redis
+  infolearn-mysql:
+    image: mysql:latest
+    container_name: infolearn-mysql
+    networks:
+      - mysql-network
+    environment:
+      MYSQL_DATABASE: infolearn
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: smddlwhgdk
+    expose:
+      - "3306"
+  redis:
+    image: docker.io/redis:alpine3.17
+    container_name: infolearn-redis
+    command: redis-server --port 6379
+    restart: always
+    networks:
+      - redis-network
+    expose:
+      - "6379"
+
+networks:
+  mysql-network:
+      driver: bridge
+  redis-network:
+      driver: bridge

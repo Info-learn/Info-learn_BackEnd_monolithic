@@ -5,6 +5,6 @@ import com.example.hierarchical_infolearn.domain.lecture.data.entity.video.Video
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface VideoRepository: JpaRepository<Video, Long> {
-    fun findBySequenceAndChapter(sequence: Int, chapter: Chapter): Video?
+    fun findByIdAndAndChapter(id: Long, chapter: Chapter): Video?
 
 }

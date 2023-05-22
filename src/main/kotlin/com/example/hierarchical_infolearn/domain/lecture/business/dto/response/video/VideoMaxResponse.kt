@@ -2,12 +2,13 @@ package com.example.hierarchical_infolearn.domain.lecture.business.dto.response.
 
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.common.VideoStatusType
 
-data class VideoDetailResponse(
+data class VideoMaxResponse(
     val videoId: Long,
     val title: String,
     val hour: Int,
     val minute: Int,
     val second: Int,
     val sequence: Int,
-    val status: VideoStatusType?
+    val status: VideoStatusType?,
+    val videoUrl: String,
 )

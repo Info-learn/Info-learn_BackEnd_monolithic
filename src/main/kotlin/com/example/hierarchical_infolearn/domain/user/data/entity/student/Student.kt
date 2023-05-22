@@ -9,7 +9,7 @@ import javax.persistence.DiscriminatorValue
 import javax.persistence.Entity
 
 @Entity
-@DiscriminatorValue("tbl_student")
+@DiscriminatorValue("student")
 @OnDelete(action = OnDeleteAction.CASCADE)
 class Student(
     accountId: String,

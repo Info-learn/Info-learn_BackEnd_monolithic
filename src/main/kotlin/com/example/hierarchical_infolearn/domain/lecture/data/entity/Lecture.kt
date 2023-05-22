@@ -43,7 +43,7 @@ class Lecture(
     var searchExplanation: String = searchExplanation
         protected set
 
-    @Column(name = "lecture_thumbnail_url", length = 255, nullable = true, unique = false)
+    @Column(name = "lecture_thumbnail_url", length = 500, nullable = true, unique = false)
     var lectureThumbnail: String? = null
         protected set
 
@@ -63,7 +63,7 @@ class Lecture(
         this.lectureThumbnail = file
     }
 
-    fun toLectureDetailResponse(): MaxLectureResponse {
+    fun toLectureDetailResponse(userId: String): MaxLectureResponse {
         return MaxLectureResponse(
             lectureId = this.id,
             title = this.title,
@@ -72,7 +72,7 @@ class Lecture(
             chapters = this.chapters.let {
                 it.filter { it1 ->
                     !it1.isDeleted
-                }.map { it1 -> it1.toChapterDetailResponse()
+                }.map { it1 -> it1.toChapterDetailResponse(userId)
                 }
             }.toSet(),
             tagNameList = tagUsageList.map {

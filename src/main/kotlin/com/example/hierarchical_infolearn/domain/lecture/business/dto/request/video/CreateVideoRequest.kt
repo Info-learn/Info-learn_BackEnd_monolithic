@@ -11,7 +11,7 @@ data class CreateVideoRequest(
     @field:PositiveOrZero(message = "영상 시간은 0보다 커야 합니다")
     val playTime: Int,
     @field:Min(1)
-    @field:Max(30)
+    @field:Max(50)
     val sequence: Int,
     @field:Valid
     val videoUrl: VideoFileRequest

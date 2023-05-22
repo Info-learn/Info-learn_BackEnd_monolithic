@@ -4,7 +4,12 @@ import javax.validation.constraints.Max
 import javax.validation.constraints.Min
 
 data class ChangeVideoSequenceRequest(
-    @field:Min(1)
-    @field:Max(30)
-    val sequence: Int,
-)
+    val videoSequences: List<VideoSequence>,
+) {
+    data class VideoSequence(
+        val videoId: Long,
+        @field:Min(1)
+        @field:Max(50)
+        val sequence: Int,
+    )
+}

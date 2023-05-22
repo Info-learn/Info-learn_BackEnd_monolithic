@@ -4,7 +4,7 @@ import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.vi
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.ChangeVideoSequenceRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.video.CreateVideoRequest
-import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.video.VideoUrlResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.video.VideoMaxResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.service.video.VideoService
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
@@ -63,7 +63,7 @@ class VideoController(
         )
     }
 
-    @PutMapping("/{chapter-id}/{sequence}/sequence")
+    @PutMapping("/{chapter-id}/sequence")
     @Operation(summary = "영상 순서 변경", description = "해당 영상의 순서를 변경합니다",
         responses = [
             ApiResponse(responseCode = "200", description = "영상 순서가 성공적으로 변경됨"),
@@ -72,14 +72,12 @@ class VideoController(
         ]
     )
     fun changeSequence(
-        @PathVariable("sequence") sequence: Int,
         @PathVariable("chapter-id") chapterId: Long,
         @Valid
         @RequestBody
         request: ChangeVideoSequenceRequest
     ) {
         videoService.changeVideoSequence(
-            sequence = sequence,
             chapterId = chapterId,
             req = request
         )
@@ -98,8 +96,8 @@ class VideoController(
         @Valid
         @RequestBody
         request: ChangeVideoRequest
-    ){
-        videoService.changeVideo(
+    ): PreSignedUrlResponse? {
+        return videoService.changeVideo(
             videoId = videoId,
             req = request,
         )
@@ -133,7 +131,15 @@ class VideoController(
         )
     fun getVideo(
         @PathVariable("video-id") videoId: Long,
-    ): VideoUrlResponse {
+    ): VideoMaxResponse {
         return videoService.getVideo(videoId)
+    }
+
+    @PutMapping("/{video-id}/complete")
+    @Operation(summary = "영상 시청완료", description = "해당 영상에 대한 시청을 완료로 표시합니다")
+    fun complete(
+        @PathVariable("video-id") videoId: Long,
+    ) {
+        videoService.videoCompleted(videoId)
     }
 }

@@ -35,14 +35,17 @@ enum class ErrorCode(
     LECTURE_NOT_FOUND("Lecture Not Found", HttpStatus.NOT_FOUND),
     INCORRECT_SEARCH_TYPE("Incorrect Search Type", HttpStatus.BAD_REQUEST),
     LECTURE_TAG_NOT_FOUND("Lecture Tag Not Found", HttpStatus.NOT_FOUND),
+    TOO_MANY_LECTURE_TAG("Too Many Lecture Tag", HttpStatus.BAD_REQUEST),
 
     //CHAPTER
     ALREADY_USING_SEQUENCE("Already Using Sequence", HttpStatus.BAD_REQUEST),
     CHAPTER_NOT_FOUND("Chapter Not Found", HttpStatus.NOT_FOUND),
     INCORRECT_CHAPTER("Incorrect Chapter", HttpStatus.BAD_REQUEST),
+    DUPLICATION_SEQUENCE("Duplication Sequence", HttpStatus.BAD_REQUEST),
 
     //VIDEO
     VIDEO_NOT_FOUND("Video Not Found", HttpStatus.NOT_FOUND),
+    ALREADY_COMPLETED_VIDEO("Already Completed Video", HttpStatus.BAD_REQUEST),
     INCORRECT_VIDEO("Incorrect Video", HttpStatus.BAD_REQUEST),
 
     //TIL

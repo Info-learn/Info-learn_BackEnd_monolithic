@@ -42,7 +42,7 @@ class Chapter(
     var videos: MutableSet<Video> = HashSet()
         protected set
 
-    fun toChapterDetailResponse(): ChapterDetailResponse {
+    fun toChapterDetailResponse(userId: String): ChapterDetailResponse {
         return ChapterDetailResponse(
             chapterId = this.id!!,
             title = this.title,
@@ -50,7 +50,7 @@ class Chapter(
             videos = this.videos.filter {
                 !it.isDeleted
             }.let {
-                it.map { it1 -> it1.toVideoDetailResponse()
+                it.map { it1 -> it1.toVideoDetailResponse(userId)
                 }
             }.toSet()
         )

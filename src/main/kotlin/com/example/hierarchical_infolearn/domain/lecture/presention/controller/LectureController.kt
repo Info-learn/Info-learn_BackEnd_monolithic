@@ -2,12 +2,14 @@ package com.example.hierarchical_infolearn.domain.lecture.presention.controller
 
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.ChangeLectureRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.CreateLectureRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.lecture.LectureTagRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureIdResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.LectureSearchResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MaxLectureResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.lecture.MiniLectureListResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameListResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.service.lecture.LectureService
+import com.example.hierarchical_infolearn.global.annotation.ListSizeLimit
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
 import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.hibernate.validator.constraints.UniqueElements
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -22,7 +25,6 @@ import java.time.LocalDateTime
 import java.util.*
 import javax.validation.Valid
 import javax.validation.constraints.Pattern
-import javax.validation.constraints.Size
 
 @RestController
 @RequestMapping("/api/infolearn/v1/lecture")
@@ -137,11 +139,12 @@ class LectureController(
     fun addLectureTag(
         @PathVariable("lecture-id") lectureId: String,
         @Valid
-        @Pattern(regexp = "^\\S+\$", message = "tag는 띄어쓰기가 안됩니다")
-        @Size(min = 1, max = 20, message = "tag의 길이는 1~20자 입니다")
-        @RequestParam(required = true) tag: String,
+        @RequestBody
+        @UniqueElements
+        @ListSizeLimit(message = "태그 갯수는 10개 이하이여야 합니다",max = 10)
+        request: List<LectureTagRequest>
     ){
-      lectureService.addLectureTag(lectureId, tag)
+      lectureService.addLectureTag(lectureId, request)
     }
 
     @DeleteMapping("/{lecture-id}/tag")
@@ -156,11 +159,12 @@ class LectureController(
     fun deleteLectureTag(
         @PathVariable("lecture-id") lectureId: String,
         @Valid
-        @Pattern(regexp = "^\\S+\$", message = "tag는 띄어쓰기가 안됩니다")
-        @Size(min = 1, max = 20, message = "tag의 길이는 1~20자 입니다")
-        @RequestParam(required = true) tag: String,
+        @RequestBody
+        @UniqueElements
+        @ListSizeLimit(max = 10)
+        request: List<LectureTagRequest>
     ){
-        lectureService.deleteLectureTag(lectureId, tag)
+        lectureService.deleteLectureTag(lectureId, request)
     }
 
     @DeleteMapping("/{lecture-id}")

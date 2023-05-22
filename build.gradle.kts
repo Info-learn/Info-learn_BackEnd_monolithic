@@ -70,7 +70,7 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-security:1.6.15")
 	implementation("org.springdoc:springdoc-openapi-kotlin:1.6.15")
 	//AWS
-	implementation(platform("software.amazon.awssdk:bom:2.17.230"))
+	implementation(platform("software.amazon.awssdk:bom:2.20.26"))
 	implementation("software.amazon.awssdk:s3")
 	//Mongo
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
@@ -91,4 +91,8 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.getByName<Jar>("jar") {
+	enabled = false
 }

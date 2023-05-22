@@ -4,8 +4,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 
-@ConfigurationProperties("cloud.aws.s3")
+@ConfigurationProperties("aws")
 @ConstructorBinding
 data class S3Property (
-    val bucketName: String
+    val bucketName: String,
+    val accessKey: String,
+    val secretKey: String,
 )
