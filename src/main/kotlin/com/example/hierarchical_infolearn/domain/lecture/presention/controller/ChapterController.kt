@@ -3,6 +3,7 @@ package com.example.hierarchical_infolearn.domain.lecture.presention.controller
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterSequenceRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.CreateChapterRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.chapter.ChapterListResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.service.chapter.ChapterService
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -101,5 +102,13 @@ class ChapterController(
         )
     }
 
-
+    @GetMapping("/{lecture-id}")
+    @Operation(
+        summary = "챕터 리스트 불러오기", description = "해당 강의에 챕터 리스트를 불러옴"
+    )
+    fun getChapters(
+        @PathVariable("lecture-id", required = true) lectureId: String
+    ): ChapterListResponse {
+        return chapterService.getChapters(lectureId = lectureId)
+    }
 }

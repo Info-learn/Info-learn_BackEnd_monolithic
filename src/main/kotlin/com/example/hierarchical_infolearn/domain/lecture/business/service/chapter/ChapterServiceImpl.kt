@@ -3,6 +3,7 @@ package com.example.hierarchical_infolearn.domain.lecture.business.service.chapt
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterSequenceRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.CreateChapterRequest
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.chapter.ChapterListResponse
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.chapter.Chapter
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.chapter.ChapterRepository
 import com.example.hierarchical_infolearn.domain.lecture.data.repo.lecture.LectureRepository
@@ -74,6 +75,16 @@ class ChapterServiceImpl(
     override fun changeChapter(chapterId: Long, req: ChangeChapterRequest) {
         val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
         chapterEntity.changeChapter(req)
+    }
+
+    override fun getChapters(lectureId: String): ChapterListResponse {
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId) ?: throw LectureNotFoundException(lectureId)
+        isOwner(lectureEntity.createdBy!!)
+        return ChapterListResponse(
+            lectureEntity.chapters.map {
+                it.toChapterMiniResponse()
+            }
+        )
     }
 
     private fun isOwner(createdBy: String){

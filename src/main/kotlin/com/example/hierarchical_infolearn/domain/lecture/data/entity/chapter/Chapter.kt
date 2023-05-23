@@ -2,6 +2,7 @@ package com.example.hierarchical_infolearn.domain.lecture.data.entity.chapter
 
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.request.chapter.ChangeChapterRequest
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.chapter.ChapterDetailResponse
+import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.chapter.ChapterMiniResponse
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.Lecture
 import com.example.hierarchical_infolearn.domain.lecture.data.entity.video.Video
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
@@ -53,6 +54,14 @@ class Chapter(
                 it.map { it1 -> it1.toVideoDetailResponse(userId)
                 }
             }.toSet()
+        )
+    }
+
+    fun toChapterMiniResponse(): ChapterMiniResponse {
+        return ChapterMiniResponse(
+            chapterId = this.id!!,
+            title = this.title,
+            sequence = this.sequence,
         )
     }
 
