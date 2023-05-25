@@ -13,9 +13,11 @@ class LectureSupportImpl(
     private val queryFactory: JPAQueryFactory,
 ): LectureSupport {
 
-    override fun queryAllLectureNoOffset(time: LocalDateTime?, limit: Long): List<Lecture>? {
+    override fun queryAllLectureNoOffset(time: LocalDateTime?, limit: Long, tag: String?): List<Lecture>? {
         val expression = BooleanBuilder()
+
         if(time != null) expression.and(lecture.createdAt.lt(time))
+        if(tag != null) expression.and(tagUsage.tag.id.`in`(tag))
 
         return queryFactory
             .selectFrom(lecture)

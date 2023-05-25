@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 interface LectureService {
     fun createLecture(req: CreateLectureRequest): LectureIdResponse
     fun getLecture(lectureId: String): MaxLectureResponse
-    fun getLectureList(time: LocalDateTime?, limit: Long): MiniLectureListResponse
+    fun getLectureList(time: LocalDateTime?, limit: Long, tag: String?): MiniLectureListResponse
     fun searchLectureList(q: String, idx: Int, size: Int): LectureSearchResponse
     fun changeLectureThumbnail(lectureId: String, req: ImageFileRequest): PreSignedUrlResponse
     fun changeLecture(lectureId: String, req: ChangeLectureRequest)

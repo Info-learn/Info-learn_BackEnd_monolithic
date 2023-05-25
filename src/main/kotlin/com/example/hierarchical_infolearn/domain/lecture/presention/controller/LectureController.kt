@@ -59,8 +59,9 @@ class LectureController(
     fun getLectureList(
         @RequestParam(required = false) time: LocalDateTime?,
         @RequestParam(required = true) limit: Long,
+        @RequestParam(required = false) tag: String?,
     ): MiniLectureListResponse {
-        return lectureService.getLectureList(time, limit)
+        return lectureService.getLectureList(time, limit, tag)
     }
 
     @GetMapping("/{lecture-id}")

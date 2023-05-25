@@ -36,7 +36,7 @@ class Video(
     var sequence: Int = sequence
         protected set
 
-    @Column(name = "video_url", nullable = true)
+    @Column(name = "video_url", nullable = true, length = 500)
     var videoUrl: String? = null
         protected set
 

@@ -83,7 +83,7 @@ class ChapterServiceImpl(
         return ChapterListResponse(
             lectureEntity.chapters.map {
                 it.toChapterMiniResponse()
-            }
+            }.sortedBy { it.sequence }
         )
     }
 

@@ -83,8 +83,8 @@ class LectureServiceImpl(
         return lectureEntity.toLectureDetailResponse(currentUtil.getCurrentUser().accountId)
     }
 
-    override fun getLectureList(time: LocalDateTime?, limit: Long): MiniLectureListResponse {
-        val lectureEntityList = lectureRepository.queryAllLectureNoOffset(time, limit)
+    override fun getLectureList(time: LocalDateTime?, limit: Long, tag: String?): MiniLectureListResponse {
+        val lectureEntityList = lectureRepository.queryAllLectureNoOffset(time, limit,tag)
         lectureEntityList?: throw LectureNotFoundException(time.toString())
 
         return MiniLectureListResponse(
