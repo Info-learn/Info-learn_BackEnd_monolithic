@@ -1,7 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.exception
 
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 
-class IncorrectVideo(data:String): GlobalError(ErrorCode.INCORRECT_CHAPTER, data) {
-}
+object IncorrectVideo: GlobalException(ErrorCode.INCORRECT_CHAPTER)
