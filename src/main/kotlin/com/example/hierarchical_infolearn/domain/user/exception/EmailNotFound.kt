@@ -1,7 +1,6 @@
 package com.example.hierarchical_infolearn.domain.user.exception
 
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 
-class EmailNotFound(data: String): GlobalError(ErrorCode.EMAIL_NOT_FOUND, data) {
-}
+object EmailNotFound: GlobalException(ErrorCode.EMAIL_NOT_FOUND)
