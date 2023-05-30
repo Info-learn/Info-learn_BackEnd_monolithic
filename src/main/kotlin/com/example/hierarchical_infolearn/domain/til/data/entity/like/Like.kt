@@ -14,6 +14,6 @@ class Like(
     val id: Long? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "til_id")
+    @JoinColumn(name = "til_id", columnDefinition = "BINARY(16)")
     var til: Til = til
 }

@@ -22,7 +22,7 @@ class EmailServiceImpl(
     }
 
     override fun sendCodeToEmail(email: String) {
-        if(userRepository.existsByEmail(email)) throw EmailAlreadyExists(email)
+        if(userRepository.existsByEmail(email)) throw EmailAlreadyExists
         val random = RandomStringUtils.randomNumeric(CODE_LENGTH)
         codeRepository.save(
             AuthCode(

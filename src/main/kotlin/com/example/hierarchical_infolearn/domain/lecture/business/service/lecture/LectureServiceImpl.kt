@@ -79,13 +79,13 @@ class LectureServiceImpl(
 
 
     override fun getLecture(lectureId: String): MaxLectureResponse {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException
         return lectureEntity.toLectureDetailResponse(currentUtil.getCurrentUser().accountId)
     }
 
     override fun getLectureList(time: LocalDateTime?, limit: Long, tag: String?): MiniLectureListResponse {
         val lectureEntityList = lectureRepository.queryAllLectureNoOffset(time, limit,tag)
-        lectureEntityList?: throw LectureNotFoundException(time.toString())
+        lectureEntityList?: throw LectureNotFoundException
 
         return MiniLectureListResponse(
             lectureEntityList.map {
@@ -95,8 +95,12 @@ class LectureServiceImpl(
     }
 
     override fun searchLectureList(q: String, idx: Int, size: Int): LectureSearchResponse {
-        val titleResultEntities = lectureRepository.findBySearchTitleContaining(q, PageRequest.of(idx, size))?: throw LectureNotFoundException(q)
-        val explanationResultEntities = lectureRepository.findBySearchExplanationContaining(q, PageRequest.of(idx, size))?: throw LectureNotFoundException(q)
+
+        val titleResultEntities = lectureRepository.findBySearchTitleContaining(q, PageRequest.of(idx, size))
+            ?: throw LectureNotFoundException
+
+        val explanationResultEntities = lectureRepository.findBySearchExplanationContaining(q, PageRequest.of(idx, size))
+            ?: throw LectureNotFoundException
 
         return LectureSearchResponse(
             titleResults = titleResultEntities.map {
@@ -109,7 +113,7 @@ class LectureServiceImpl(
     }
 
     override fun changeLectureThumbnail(lectureId: String, req: ImageFileRequest): PreSignedUrlResponse {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException
         isOwner(lectureEntity.createdBy!!)
         val (preSignedUrl, fileUrl) = preSignedUrl(req.fileName, req.contentType, lectureId, req.fileSize)
 
@@ -139,24 +143,24 @@ class LectureServiceImpl(
     }
 
     override fun changeLecture(lectureId: String, req: ChangeLectureRequest) {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException
         isOwner(lectureEntity.createdBy!!)
         lectureEntity.changeLecture(req)
     }
 
     override fun deleteLecture(lectureId: String) {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException
         isOwner(lectureEntity.createdBy!!)
         lectureRepository.delete(lectureEntity)
     }
 
     override fun addLectureTag(lectureId: String, req: List<LectureTagRequest>) {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException
         isOwner(lectureEntity.createdBy!!)
 
         val tagCount = lectureEntity.tagUsageList.size + req.size
 
-        if(tagCount > 10) throw TooManyLectureTag(tagCount.toString())
+        if(tagCount > 10) throw TooManyLectureTag
 
         req.forEach {
             val lectureTagEntity = lectureTagRepository.findByIdOrNull(it.tagId)?: lectureTagRepository.save(Tag(it.tagId))
@@ -173,12 +177,12 @@ class LectureServiceImpl(
     }
 
     override fun deleteLectureTag(lectureId: String, req: List<LectureTagRequest>) {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException
 
         isOwner(lectureEntity.createdBy!!)
 
         req.forEach {
-            val lectureTagEntity = lectureTagRepository.findByIdOrNull(it.tagId)?: throw LectureTagNotFound(it.tagId)
+            val lectureTagEntity = lectureTagRepository.findByIdOrNull(it.tagId)?: throw LectureTagNotFound
 
             lectureEntity.tagUsageList.firstOrNull{ it1 ->
                 it1.tag == lectureTagEntity
@@ -190,7 +194,7 @@ class LectureServiceImpl(
     }
 
     override fun getLectureTag(usageCount: Long?, limit: Long): TagNameListResponse {
-        val lectureTagEntities = lectureTagRepository.queryAllLectureTagNoOffset(usageCount, limit)?: throw LectureTagNotFound(usageCount.toString())
+        val lectureTagEntities = lectureTagRepository.queryAllLectureTagNoOffset(usageCount, limit)?: throw LectureTagNotFound
 
         return TagNameListResponse(lectureTagEntities.map {
             it.toTagResponse()
@@ -199,6 +203,6 @@ class LectureServiceImpl(
 
     private fun isOwner(createdBy: String){
         val teacher = currentUtil.getCurrentUser()
-        if(createdBy != teacher.accountId) throw NoAuthenticationException(teacher.accountId)
+        if(createdBy != teacher.accountId) throw NoAuthenticationException
     }
 }

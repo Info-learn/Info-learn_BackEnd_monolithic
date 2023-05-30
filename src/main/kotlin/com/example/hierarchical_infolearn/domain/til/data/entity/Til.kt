@@ -8,6 +8,7 @@ import com.example.hierarchical_infolearn.global.base.entity.BaseTimeEntity
 import org.bson.types.ObjectId
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
+import java.util.UUID
 import javax.persistence.*
 
 
@@ -16,7 +17,7 @@ import javax.persistence.*
 @SQLDelete(sql = "UPDATE `tbl_til` SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false AND is_private = false")
 class Til(
-    id: String,
+    id: UUID? = null,
     title: String,
     searchTitle: String,
     subTitle: String?,
@@ -25,8 +26,9 @@ class Til(
     user: User,
 ): BaseTimeEntity() {
 
-    @Id
-    val id: String = id
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "BINARY(16)")
+    val id: UUID? = id
 
     @Column(name = "title", length = 50, nullable = true, unique = false)
     var title: String = title

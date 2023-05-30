@@ -7,7 +7,7 @@ import com.example.hierarchical_infolearn.domain.user.business.service.auth.Auth
 import com.example.hierarchical_infolearn.domain.user.business.service.email.EmailService
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
-import com.example.hierarchical_infolearn.global.security.jwt.data.TokenResponse
+import com.example.hierarchical_infolearn.global.config.security.jwt.data.TokenResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -26,16 +26,18 @@ class AuthController(
 
 
     @GetMapping("/check/account")
-    @Operation(summary = "account_id 중복 검사", description = "해당 account_id가 중복인지 검사합니다",
+    @Operation(
+        summary = "account_id 중복 검사",
+        description = "해당 account_id가 중복인지 검사합니다",
         responses = [
             ApiResponse(responseCode = "200", description = "account_id가 중복이 아님"),
             ApiResponse(responseCode = "400", description = "account_id가 중복임", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
         ]
-        )
+    )
     fun checkDuplicate(
         @RequestParam(required = true) accountId: String,
     ) {
-        authService.checkAccountIdDuplicate(accountId = accountId)
+        authService.checkAccountIdDuplicate(accountId)
     }
 
     @PostMapping("/email")
@@ -82,7 +84,7 @@ class AuthController(
             ApiResponse(responseCode = "400", description = "1. 인증코드가 일치하지 않음 \n 2. account_id가 이미 존재함 \n 3. 공백이거나 NULL 값일 수 없음 \n 4. 비밀번호는 영문자,숫자,특수문자 8~30자이여야함 \n 5. 올바른 도메인이 아님 \n 6. 인증번호는 6자리임", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
             ApiResponse(responseCode = "404", description = "이메일을 찾을 수 없음", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
         ]
-        )
+    )
     fun studentSignUp(
         @Valid
         @RequestBody(required = true) request: StudentSignUpRequest,
@@ -121,9 +123,5 @@ class AuthController(
     fun signIn(
         @RequestBody
         request: SignInRequest
-    ): TokenResponse {
-        return authService.signIn(
-            req = request
-        )
-    }
+    ): TokenResponse = authService.signIn(request)
 }

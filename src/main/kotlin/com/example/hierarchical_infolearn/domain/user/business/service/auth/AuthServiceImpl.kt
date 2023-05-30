@@ -15,8 +15,8 @@ import com.example.hierarchical_infolearn.domain.user.data.repo.user.TeacherRepo
 import com.example.hierarchical_infolearn.domain.user.data.repo.user.UserRepository
 import com.example.hierarchical_infolearn.domain.user.exception.*
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
-import com.example.hierarchical_infolearn.global.security.jwt.TokenProvider
-import com.example.hierarchical_infolearn.global.security.jwt.data.TokenResponse
+import com.example.hierarchical_infolearn.global.config.security.jwt.TokenProvider
+import com.example.hierarchical_infolearn.global.config.security.jwt.data.TokenResponse
 import com.example.hierarchical_infolearn.infra.s3.S3Util
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -40,8 +40,8 @@ class AuthServiceImpl(
     }
 
     override fun checkAuthCode(email: String, authCode: String) {
-        val checkEmail = codeRepository.findByIdOrNull(email)?: throw EmailNotFound(email)
-        if(checkEmail.code != authCode) throw IncorrectAuthCode(authCode)
+        val checkEmail = codeRepository.findByIdOrNull(email)?: throw EmailNotFound
+        if(checkEmail.code != authCode) throw IncorrectAuthCode
     }
 
     override fun studentSignUp(req: StudentSignUpRequest): PreSignedUrlResponse? {
@@ -60,7 +60,7 @@ class AuthServiceImpl(
 
         req.profileImage?.let {
 
-            val (preSignedUrl, file) = preSignedUrl(Role.STUDENT, it.fileName, it.contentType,it.fileSize ,req.accountId)
+            val (preSignedUrl, file) = preSignedUrl(Role.STUDENT, it.fileName, it.contentType, it.fileSize ,req.accountId)
 
             studentEntity.uploadProfileImage(
                 file
@@ -119,24 +119,24 @@ class AuthServiceImpl(
     }
 
     private fun checkTeacherCode(teacherCode: String) {
-        if(teacherCode != "123456") throw IncorrectTeacherCode(teacherCode)
+        if(teacherCode != "123456") throw IncorrectTeacherCode
     }
 
     private fun checkAuthCodeAndDelete(email: String, authCode: String) {
-        val checkEmail = codeRepository.findByIdOrNull(email)?: throw EmailNotFound(email)
-        if(checkEmail.code != authCode || checkEmail.type != CodeType.SIGNUP) throw IncorrectAuthCode(authCode)
+        val checkEmail = codeRepository.findByIdOrNull(email)?: throw EmailNotFound
+        if(checkEmail.code != authCode || checkEmail.type != CodeType.SIGNUP) throw IncorrectAuthCode
         codeRepository.delete(checkEmail)
     }
 
     private fun checkAccountId(accountId: String) {
         val isDuplicate = userRepository.existsByAccountId(accountId)
-        if(isDuplicate) throw AccountIdAlreadyExists(accountId)
+        if(isDuplicate) throw AccountIdAlreadyExists
     }
 
     override fun signIn(req: SignInRequest): TokenResponse {
-        val user = userRepository.findByIdOrNull(req.accountId) ?: throw UserNotFoundException(req.accountId)
+        val user = userRepository.findByIdOrNull(req.accountId) ?: throw UserNotFoundException
 
-        if(!passwordEncoder.matches(req.password, user.password)) throw IncorrectPassword(req.password)
+        if(!passwordEncoder.matches(req.password, user.password)) throw IncorrectPassword
         val tokenUUID = UUID.randomUUID().toString()
         val response = tokenProvider.encode(user.accountId, user.role.name, tokenUUID)
         refreshTokenRepository.findByIdOrNull(user.accountId)?.reset(response.refreshToken)

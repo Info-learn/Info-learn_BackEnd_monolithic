@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.exception
 
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 
-class IncorrectSearchType(data: String):GlobalError(ErrorCode.INCORRECT_SEARCH_TYPE, data)
+object IncorrectSearchType: GlobalException(ErrorCode.INCORRECT_SEARCH_TYPE)

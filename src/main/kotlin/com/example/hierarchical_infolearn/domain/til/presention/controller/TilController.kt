@@ -20,30 +20,31 @@ import javax.validation.Valid
 class TilController(
     private val tilService: TilService,
 ){
-    @PostMapping("")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(
         summary = "til 생성", description = "til을 생성합니다",
         responses = [
-            ApiResponse(responseCode = "201", description = "til이 성공적으로 생성됨", content = [Content(schema = Schema(implementation = PreSignedUrlResponse::class))])
-                ]
+            ApiResponse(
+                responseCode = "201",
+                description = "til이 성공적으로 생성됨",
+                content = [Content(schema = Schema(implementation = PreSignedUrlResponse::class))])]
     )
     fun createTil(
         @RequestBody
         @Valid
         request: CreateTilRequest,
-    ):PreSignedUrlResponse {
-        return tilService.createTil(
-            req = request,
-        )
-    }
+    ) = tilService.createTil(request)
 
     @PostMapping("/image")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(
         summary = "이미지 생성", description = "til 내용에 들어갈 이미지를 생성합니다",
         responses = [
-            ApiResponse(responseCode = "201", description = "이미지가 성공적으로 생성됨", content = [Content(schema = Schema(implementation = TilContentImageResponse::class))])
+            ApiResponse(
+                responseCode = "201",
+                description = "이미지가 성공적으로 생성됨",
+                content = [Content(schema = Schema(implementation = TilContentImageResponse::class))])
         ]
     )
     fun createImage(

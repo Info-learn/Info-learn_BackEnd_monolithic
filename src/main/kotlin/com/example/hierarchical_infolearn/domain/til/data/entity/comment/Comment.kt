@@ -18,7 +18,7 @@ class Comment(
     val content: String = content
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "til_id")
+    @JoinColumn(name = "til_id", columnDefinition = "BINARY(16)")
     var til: Til = til
 
 }

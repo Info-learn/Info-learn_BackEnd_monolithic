@@ -1,7 +1,6 @@
 package com.example.hierarchical_infolearn.global.file.exception
 
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 
-class FileNotFoundException(data: String): GlobalError(ErrorCode.FILE_NOT_FOUND, data) {
-}
+object FileNotFoundException: GlobalException(ErrorCode.FILE_NOT_FOUND)

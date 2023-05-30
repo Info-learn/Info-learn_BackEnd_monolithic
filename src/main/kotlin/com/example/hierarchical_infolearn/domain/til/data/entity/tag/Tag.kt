@@ -9,6 +9,7 @@ import javax.persistence.*
 class Tag(
     name: String,
 ): BaseAuthorEntity() {
+
     @Id
     @Column(nullable = false, length = 20, unique = true, columnDefinition = "varchar(20) binary")
     val id: String = name

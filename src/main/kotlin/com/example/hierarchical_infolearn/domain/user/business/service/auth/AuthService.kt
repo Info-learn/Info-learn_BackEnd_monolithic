@@ -4,7 +4,7 @@ import com.example.hierarchical_infolearn.domain.user.business.dto.request.SignI
 import com.example.hierarchical_infolearn.domain.user.business.dto.request.StudentSignUpRequest
 import com.example.hierarchical_infolearn.domain.user.business.dto.request.TeacherSignUpRequest
 import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
-import com.example.hierarchical_infolearn.global.security.jwt.data.TokenResponse
+import com.example.hierarchical_infolearn.global.config.security.jwt.data.TokenResponse
 
 interface AuthService {
 

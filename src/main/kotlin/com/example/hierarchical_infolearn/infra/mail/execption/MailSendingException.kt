@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.infra.mail.execption
 
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 
-class MailSendingException(data: String): GlobalError(ErrorCode.EMAIL_ERROR, data)
+object MailSendingException: GlobalException(ErrorCode.EMAIL_ERROR)

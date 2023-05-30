@@ -1,7 +1,6 @@
 package com.example.hierarchical_infolearn.domain.til.exception
 
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 
-class TilNotFound(data: String): GlobalError(ErrorCode.TIL_NOT_FOUND, data) {
-}
+object TilNotFound: GlobalException(ErrorCode.TIL_NOT_FOUND)
