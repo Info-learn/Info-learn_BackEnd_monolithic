@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.global.security.jwt.env
+package com.example.hierarchical_infolearn.global.config.security.jwt.env
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
