@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.exception
 
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 
-class AlreadyUsingSequence(data: String): GlobalError(ErrorCode.ALREADY_USING_SEQUENCE, data)
+object AlreadyUsingSequence: GlobalException(ErrorCode.ALREADY_USING_SEQUENCE)
