@@ -1,9 +1,9 @@
-package com.example.hierarchical_infolearn.global.security.config
+package com.example.hierarchical_infolearn.global.config.security
 
 import com.example.hierarchical_infolearn.domain.user.data.entity.common.user.Role
-import com.example.hierarchical_infolearn.global.security.jwt.TokenProvider
-import com.example.hierarchical_infolearn.global.security.jwt.auth.StudentDetailsService
-import com.example.hierarchical_infolearn.global.security.jwt.auth.TeacherDetailsService
+import com.example.hierarchical_infolearn.global.config.security.jwt.TokenProvider
+import com.example.hierarchical_infolearn.global.config.security.jwt.auth.StudentDetailsService
+import com.example.hierarchical_infolearn.global.config.security.jwt.auth.TeacherDetailsService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -22,7 +22,7 @@ import org.springframework.web.cors.CorsUtils
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfiguration(
+class SecurityConfig(
     private val tokenProvider: TokenProvider,
     private val studentDetails: StudentDetailsService,
     private val teacherDetails: TeacherDetailsService,
@@ -105,7 +105,7 @@ class SecurityConfiguration(
             .anyRequest().denyAll()
 
             .and()
-            .apply(FilterConfiguration(tokenProvider, studentDetails, teacherDetails ,objectMapper))
+            .apply(FilterConfig(tokenProvider, studentDetails, teacherDetails ,objectMapper))
             .and().build()
     }
 }
