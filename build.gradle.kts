@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-web"){
+	implementation("org.springframework.boot:spring-boot-starter-web") {
 		exclude(module = "spring-boot-starter-tomcat")
 	}
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -78,7 +78,7 @@ dependencies {
 	implementation("com.querydsl:querydsl-jpa:5.0.0")
 	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 	//WebSocket
-	implementation("org.springframework.boot:spring-boot-starter-websocket")
+	implementation("com.corundumstudio.socketio:netty-socketio:1.7.19")
 
 }
 
