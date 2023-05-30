@@ -1,7 +1,6 @@
 package com.example.hierarchical_infolearn.domain.lecture.exception
 
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 
-class LectureNotFoundException(data: String): GlobalError(ErrorCode.LECTURE_NOT_FOUND, data) {
-}
+object LectureNotFoundException: GlobalException(ErrorCode.LECTURE_NOT_FOUND)
