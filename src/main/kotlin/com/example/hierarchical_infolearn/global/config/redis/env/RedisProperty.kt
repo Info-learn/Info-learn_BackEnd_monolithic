@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.global.redis.env
+package com.example.hierarchical_infolearn.global.config.redis.env
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
