@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.global.error.common
 
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 
-class NoAuthenticationException(data: String): GlobalError(ErrorCode.NO_AUTHENTICATION, data)
+object NoAuthenticationException: GlobalException(ErrorCode.NO_AUTHENTICATION)
