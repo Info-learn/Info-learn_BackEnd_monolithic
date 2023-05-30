@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.global.security.principle
+package com.example.hierarchical_infolearn.global.config.security.principle
 
 import com.example.hierarchical_infolearn.domain.user.data.entity.common.user.Role
 import org.springframework.security.core.GrantedAuthority
