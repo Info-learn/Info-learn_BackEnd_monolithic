@@ -1,6 +1,6 @@
 package com.example.hierarchical_infolearn.global.redis
 
-import com.example.hierarchical_infolearn.global.redis.env.RedisProperty
+import com.example.hierarchical_infolearn.global.config.redis.env.RedisProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisConnectionFactory
@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate
 
 
 @Configuration
-class RedisConfiguration(
+class RedisConfig(
     private val redisProperty: RedisProperty
 ) {
 
