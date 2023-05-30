@@ -1,9 +1,9 @@
-package com.example.hierarchical_infolearn.global.security.jwt
+package com.example.hierarchical_infolearn.global.config.security.jwt
 
-import com.example.hierarchical_infolearn.global.security.jwt.data.TokenResponse
-import com.example.hierarchical_infolearn.global.security.jwt.env.JwtProperty
-import com.example.hierarchical_infolearn.global.security.jwt.exception.ExpiredTokenException
-import com.example.hierarchical_infolearn.global.security.jwt.exception.InvalidTokenException
+import com.example.hierarchical_infolearn.global.config.security.jwt.data.TokenResponse
+import com.example.hierarchical_infolearn.global.config.security.jwt.env.JwtProperty
+import com.example.hierarchical_infolearn.global.config.security.jwt.exception.ExpiredTokenException
+import com.example.hierarchical_infolearn.global.config.security.jwt.exception.InvalidTokenException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
@@ -41,15 +41,15 @@ class TokenProvider(
         try {
             return Jwts.parser().setSigningKey(jwtProperty.secretKey).parseClaimsJws(token).body
         } catch (e: JwtException) {
-            throw InvalidTokenException(e.message.toString())
+            throw InvalidTokenException
         }
     }
 
     fun getSubjectWithExpiredCheck(token: String): Pair<String, String>? {
         val body = decodeBody(token)
-        body.subject?: throw InvalidTokenException(body["type"].toString())
+        body.subject?: throw InvalidTokenException
         val now = Date()
-        if (now.after(Date(now.time + body.expiration.time))) throw ExpiredTokenException(token)
+        if (now.after(Date(now.time + body.expiration.time))) throw ExpiredTokenException
         return Pair(body.subject , body.id)
     }
 
