@@ -26,14 +26,12 @@ class ChapterServiceImpl(
 ):ChapterService {
 
     override fun createChapter(req: CreateChapterRequest) {
-        val lectureEntity = lectureRepository.findByIdOrNull(req.lectureId)?: throw LectureNotFoundException(req.lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(req.lectureId)?: throw LectureNotFoundException
         isOwner(lectureEntity.createdBy!!)
 
         lectureEntity.chapters.firstOrNull{
             !it.isDeleted && it.sequence == req.sequence
-        }?.let {
-            throw AlreadyUsingSequence(req.sequence.toString())
-        }
+        } ?: throw AlreadyUsingSequence
 
         chapterRepository.save(
             Chapter(
@@ -45,9 +43,9 @@ class ChapterServiceImpl(
     }
 
     override fun deleteChapter(lectureId: String, chapterId: Long) {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException
         isOwner(lectureEntity.createdBy!!)
-        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
+        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException
 
         lectureEntity.chapters.firstOrNull{
             !it.isDeleted && it == chapterEntity
@@ -57,28 +55,28 @@ class ChapterServiceImpl(
     }
 
     override fun changeChapterSequence(lectureId: String, req: ChangeChapterSequenceRequest) {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException(lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId)?: throw LectureNotFoundException
         isOwner(lectureEntity.createdBy!!)
 
         val duplicationChecker = req.chapterSequences.map {
             it.sequence
         }.toSet()
 
-        if (duplicationChecker.size != req.chapterSequences.size) throw DuplicationSequenceException(req.chapterSequences.size.toString())
+        if (duplicationChecker.size != req.chapterSequences.size) throw DuplicationSequenceException
 
         req.chapterSequences.forEach {
-            val chapterEntity = chapterRepository.findByIdAndLecture(it.chapterId, lectureEntity)?: throw ChapterNotFoundException(it.chapterId.toString())
+            val chapterEntity = chapterRepository.findByIdAndLecture(it.chapterId, lectureEntity)?: throw ChapterNotFoundException
             chapterEntity.updateSequence(it.sequence)
         }
     }
 
     override fun changeChapter(chapterId: Long, req: ChangeChapterRequest) {
-        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
+        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException
         chapterEntity.changeChapter(req)
     }
 
     override fun getChapters(lectureId: String): ChapterListResponse {
-        val lectureEntity = lectureRepository.findByIdOrNull(lectureId) ?: throw LectureNotFoundException(lectureId)
+        val lectureEntity = lectureRepository.findByIdOrNull(lectureId) ?: throw LectureNotFoundException
         isOwner(lectureEntity.createdBy!!)
         return ChapterListResponse(
             lectureEntity.chapters.map {
@@ -89,7 +87,7 @@ class ChapterServiceImpl(
 
     private fun isOwner(createdBy: String){
         val teacher = currentUtil.getCurrentUser()
-        if(createdBy != teacher.accountId) throw NoAuthenticationException(teacher.accountId)
+        if(createdBy != teacher.accountId) throw NoAuthenticationException
     }
 
 }
