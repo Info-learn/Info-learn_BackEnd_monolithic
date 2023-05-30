@@ -1,10 +1,10 @@
-package com.example.hierarchical_infolearn.global.security.jwt
+package com.example.hierarchical_infolearn.global.config.security.jwt
 
 import com.example.hierarchical_infolearn.domain.user.data.entity.common.user.Role
 import com.example.hierarchical_infolearn.global.error.common.NoAuthenticationException
-import com.example.hierarchical_infolearn.global.security.jwt.auth.StudentDetailsService
-import com.example.hierarchical_infolearn.global.security.jwt.auth.TeacherDetailsService
-import com.example.hierarchical_infolearn.global.security.jwt.exception.InvalidTokenException
+import com.example.hierarchical_infolearn.global.config.security.jwt.auth.StudentDetailsService
+import com.example.hierarchical_infolearn.global.config.security.jwt.auth.TeacherDetailsService
+import com.example.hierarchical_infolearn.global.config.security.jwt.exception.InvalidTokenException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
@@ -34,7 +34,7 @@ class JwtFilter(
             val userDetails = when (subject) {
                 Role.TEACHER.name -> teacherDetailsService.loadUserByUsername(id)
                 Role.STUDENT.name -> studentDetailsService.loadUserByUsername(id)
-                else -> throw NoAuthenticationException("InvalidRole")
+                else -> throw NoAuthenticationException
             }
 
             SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
@@ -47,6 +47,6 @@ class JwtFilter(
         if (bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7)
         }
-        throw InvalidTokenException(bearerToken)
+        throw InvalidTokenException
     }
 }
