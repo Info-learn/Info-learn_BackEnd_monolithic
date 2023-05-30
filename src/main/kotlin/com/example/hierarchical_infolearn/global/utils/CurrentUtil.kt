@@ -17,6 +17,6 @@ class CurrentUtil(
 
     fun getCurrentUser(): User {
         val subject = getCurrentSubject()
-        return userRepository.findByIdOrNull(subject)?: throw UserNotFoundException(subject)
+        return userRepository.findByIdOrNull(subject)?: throw UserNotFoundException
     }
 }
