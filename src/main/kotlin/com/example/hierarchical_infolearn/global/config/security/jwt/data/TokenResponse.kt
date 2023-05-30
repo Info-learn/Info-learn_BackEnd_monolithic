@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.global.security.jwt.data
+package com.example.hierarchical_infolearn.global.config.security.jwt.data
 
 data class TokenResponse(
     val accessToken: String,
