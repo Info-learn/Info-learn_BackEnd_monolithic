@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus
 enum class ErrorCode(
     val message: String,
     val status: HttpStatus,
-    val data: String? = null,
 ) {
     //File
     FILE_NOT_FOUND("File not Found", HttpStatus.NOT_FOUND),
@@ -50,4 +49,7 @@ enum class ErrorCode(
 
     //TIL
     TIL_NOT_FOUND("Til Not Found", HttpStatus.NOT_FOUND),
+
+    //GLOBAL
+    INTERNAL_SERVER_ERROR("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR)
 }
