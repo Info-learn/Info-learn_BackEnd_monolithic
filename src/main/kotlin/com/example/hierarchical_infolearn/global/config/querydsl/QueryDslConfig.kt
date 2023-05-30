@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.global.querydsl
+package com.example.hierarchical_infolearn.global.config.querydsl
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.context.annotation.Bean
@@ -7,7 +7,7 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
 @Configuration
-class QueryDslConfiguration {
+class QueryDslConfig {
     @PersistenceContext
     lateinit var em: EntityManager
 
