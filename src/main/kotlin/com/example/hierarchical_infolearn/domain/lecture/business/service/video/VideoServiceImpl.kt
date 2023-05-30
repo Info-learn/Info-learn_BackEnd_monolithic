@@ -31,14 +31,12 @@ class VideoServiceImpl(
     ): VideoService {
 
     override fun createVideo(chapterId: Long, req: CreateVideoRequest):PreSignedUrlResponse {
-        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
+        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException
         isOwner(chapterEntity.createdBy!!)
 
         chapterEntity.videos.firstOrNull{
             !it.isDeleted && it.sequence == req.sequence
-        }?.let {
-            throw AlreadyUsingSequence(req.sequence.toString())
-        }
+        } ?: throw AlreadyUsingSequence
 
         val videoEntity = videoRepository.save(
             Video(
@@ -80,7 +78,7 @@ class VideoServiceImpl(
     }
 
     override fun deleteVideo(videoId: Long) {
-        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound(videoId.toString())
+        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound
 
         isOwner(videoEntity.createdBy!!)
 
@@ -88,26 +86,26 @@ class VideoServiceImpl(
     }
 
     override fun changeVideoSequence(chapterId: Long, req: ChangeVideoSequenceRequest) {
-        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException(chapterId.toString())
+        val chapterEntity = chapterRepository.findByIdOrNull(chapterId)?: throw ChapterNotFoundException
         isOwner(chapterEntity.createdBy!!)
 
-        if(req.videoSequences.size > chapterEntity.videos.size) throw VideoNotFound(req.videoSequences.size.toString())
+        if(req.videoSequences.size > chapterEntity.videos.size) throw VideoNotFound
 
         val duplicationChecker = req.videoSequences.map {
             it.sequence
         }.toSet()
 
-        if (duplicationChecker.size != req.videoSequences.size) throw DuplicationSequenceException(req.videoSequences.size.toString())
+        if (duplicationChecker.size != req.videoSequences.size) throw DuplicationSequenceException
 
         req.videoSequences.forEach {
-            val videoEntity = videoRepository.findByIdAndAndChapter(it.videoId, chapterEntity)?: throw VideoNotFound(it.videoId.toString())
+            val videoEntity = videoRepository.findByIdAndChapter(it.videoId, chapterEntity) ?: throw VideoNotFound
             videoEntity.updateSequence(it.sequence)
         }
 
     }
 
     override fun changeVideo(videoId: Long, req: ChangeVideoRequest): PreSignedUrlResponse? {
-        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound(videoId.toString())
+        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound
         isOwner(videoEntity.createdBy!!)
         videoEntity.changeVideo(req)
         req.videoUrl?.let {
@@ -119,10 +117,10 @@ class VideoServiceImpl(
     }
 
     override fun changeVideoChapter(videoId: Long, req: ChangeVideoChapterRequest) {
-        val chapterEntity = chapterRepository.findByIdOrNull(req.chapterId)?: throw ChapterNotFoundException(req.chapterId.toString())
+        val chapterEntity = chapterRepository.findByIdOrNull(req.chapterId)?: throw ChapterNotFoundException
         isOwner(chapterEntity.createdBy!!)
-        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound(videoId.toString())
-        val targetChapterEntity = chapterRepository.findByIdOrNull(req.targetChapterId)?: throw ChapterNotFoundException(req.targetChapterId.toString())
+        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound
+        val targetChapterEntity = chapterRepository.findByIdOrNull(req.targetChapterId)?: throw ChapterNotFoundException
         val lastSequence = targetChapterEntity.videos.filter {
             !it.isDeleted
         }.size
@@ -131,15 +129,15 @@ class VideoServiceImpl(
     }
 
     override fun getVideo(videoId: Long): VideoMaxResponse {
-        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound(videoId.toString())
+        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound
         return videoEntity.toVideoUrlResponse(currentUtil.getCurrentUser().accountId)
     }
 
 
     override fun videoCompleted(videoId: Long) {
-        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound(videoId.toString())
+        val videoEntity = videoRepository.findByIdOrNull(videoId)?: throw VideoNotFound
 
-        if(videoStatusRepository.existsByVideoAndCreatedBy(videoEntity,currentUtil.getCurrentUser().accountId)) throw AlreadyCompletedVideoException(videoEntity.id.toString())
+        if(videoStatusRepository.existsByVideoAndCreatedBy(videoEntity,currentUtil.getCurrentUser().accountId)) throw AlreadyCompletedVideoException
 
         val videoStatus = VideoStatus(
             videoEntity,
@@ -150,6 +148,6 @@ class VideoServiceImpl(
 
     private fun isOwner(createdBy: String){
         val teacher = currentUtil.getCurrentUser()
-        if(createdBy != teacher.accountId) throw NoAuthenticationException(teacher.accountId)
+        if(createdBy != teacher.accountId) throw NoAuthenticationException
     }
 }
