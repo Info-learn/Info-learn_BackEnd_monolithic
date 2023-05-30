@@ -25,12 +25,14 @@ class MailUtil (
 
         try {
             val helper = MimeMessageHelper(message, true, "UTF-8")
-            helper.setFrom(mailProperty.username)
-            helper.setSubject(title)
-            helper.setTo(to)
-            helper.setText(content, true)
+            helper.let {
+                it.setFrom(mailProperty.username)
+                it.setSubject(title)
+                it.setTo(to)
+                it.setText(content, true)
+            }
         } catch (e: MessagingException) {
-            throw MailSendingException("SMTP 를 통해 메일 발송중 오류가 발생하였습니다!")
+            throw MailSendingException
         }
         jms.send(message)
     }
