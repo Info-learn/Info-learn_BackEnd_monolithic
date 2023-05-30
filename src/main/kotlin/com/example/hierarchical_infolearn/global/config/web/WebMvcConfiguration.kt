@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.global.web
+package com.example.hierarchical_infolearn.global.config.web
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
