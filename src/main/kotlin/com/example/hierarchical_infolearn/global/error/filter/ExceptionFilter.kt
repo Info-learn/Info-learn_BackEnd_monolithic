@@ -1,7 +1,7 @@
 package com.example.hierarchical_infolearn.global.error.filter
 
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
-import com.example.hierarchical_infolearn.global.error.data.GlobalError
+import com.example.hierarchical_infolearn.global.error.data.GlobalException
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
@@ -19,16 +19,13 @@ class ExceptionFilter(
     ) {
         try {
             filterChain.doFilter(request, response)
-        } catch (err: GlobalError) {
-            response.status = err.errorCode.status.value()
-            response.contentType = MediaType.APPLICATION_JSON_VALUE
-            response.characterEncoding = "UTF-8"
-            objectMapper.writeValue(
-                response.writer, ErrorResponse(
-                    err.errorCode.message,
-                    err.data
-                )
-            )
+        } catch (e: GlobalException) {
+            response.let {
+                it.status = e.errorCode.status.value()
+                it.contentType = MediaType.APPLICATION_JSON_VALUE
+                it.characterEncoding = "UTF-8"
+            }
+            objectMapper.writeValue(response.writer, ErrorResponse.of(e.errorCode))
         }
     }
 
