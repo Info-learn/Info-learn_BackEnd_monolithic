@@ -1,6 +1,7 @@
 package com.example.hierarchical_infolearn.domain.til.business.service.til
 
 import com.example.hierarchical_infolearn.domain.til.business.dto.request.CreateTilRequest
+import com.example.hierarchical_infolearn.domain.til.business.dto.response.CreateTilResponse
 import com.example.hierarchical_infolearn.domain.til.business.dto.response.TilContentImageResponse
 import com.example.hierarchical_infolearn.domain.til.data.entity.Til
 import com.example.hierarchical_infolearn.domain.til.data.entity.content.Content
@@ -29,19 +30,17 @@ class TilServiceImpl(
     private val tilTagUsageRepository: TilTagUsageRepository,
 ): TilService {
 
-
     companion object {
         const val THUMBNAIL = "THUMBNAIL"
         const val IMAGE = "IMAGE"
     }
 
+    override fun createTil(req: CreateTilRequest): CreateTilResponse {
 
-    override fun createTil(req: CreateTilRequest): PreSignedUrlResponse {
-        val tilId = UUID.randomUUID().toString()
         val tilContentId = ObjectId.get()
-        val tilEntity = tilRepository.save(
+
+        val til = tilRepository.save(
             Til(
-                id = tilId,
                 title = req.title,
                 searchTitle = req.searchTitle,
                 subTitle = req.subTitle,
@@ -54,33 +53,27 @@ class TilServiceImpl(
         tilContentRepository.save(
             Content(
                 tilContentId,
-                tilId,
+                til.id!!,
                 req.content
             )
         )
+
         req.tagNameList.forEach {
 
-            val tagEntity = tilTagRepository.findByIdOrNull(it)?: tilTagRepository.save(
-                Tag(
-                    it
-                )
-            )
+            val tagEntity = tilTagRepository.findByIdOrNull(it)
+                ?: tilTagRepository.save(Tag(it))
 
             tilTagUsageRepository.save(
                 TagUsage(
                     tagEntity,
-                    tilEntity
+                    til
                 )
             )
 
             tagEntity.increaseUsageCount()
         }
 
-        val (preSignedUrl, fileUrl) = preSignedUrl(req.tilThumbnail.fileName, req.tilThumbnail.contentType, tilId, THUMBNAIL, req.tilThumbnail.fileSize)
-
-        tilEntity.uploadTilThumbnail(fileUrl)
-
-        return preSignedUrl
+        return CreateTilResponse(til.id!!)
     }
 
     override fun createImage(req: ImageFileRequest): TilContentImageResponse {
