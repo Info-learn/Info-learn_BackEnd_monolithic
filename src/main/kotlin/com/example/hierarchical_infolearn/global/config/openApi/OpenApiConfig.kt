@@ -1,4 +1,4 @@
-package com.example.hierarchical_infolearn.global.openApi
+package com.example.hierarchical_infolearn.global.config.openApi
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Info
@@ -6,14 +6,9 @@ import org.springdoc.core.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-@OpenAPIDefinition(
-    info = Info(
-        title = "Infolearn-Backend-API-DOCS",
-
-    )
-)
+@OpenAPIDefinition(info = Info(title = "Infolearn-Backend-API-DOCS"))
 @Configuration
-class OpenApiConfiguration {
+class OpenApiConfig {
 
     @Bean
     fun authOpenApi(): GroupedOpenApi {
@@ -30,6 +25,7 @@ class OpenApiConfiguration {
             .pathsToMatch("/api/infolearn/v1/lecture/**")
             .build()
     }
+
     @Bean
     fun chapterOpenApi(): GroupedOpenApi {
         return GroupedOpenApi.builder()
@@ -37,6 +33,7 @@ class OpenApiConfiguration {
             .pathsToMatch("/api/infolearn/v1/chapter/**")
             .build()
     }
+
     @Bean
     fun videoOpenApi(): GroupedOpenApi {
         return GroupedOpenApi.builder()
