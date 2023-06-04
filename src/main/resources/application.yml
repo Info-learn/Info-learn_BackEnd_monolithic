@@ -27,7 +27,7 @@ spring:
 
 datasource:
   mongo:
-    url:
+    url: ${MONGO_URL}
 
 jwt:
   secretKey: ${JWT_SECRET_KEY}
