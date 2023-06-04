@@ -73,7 +73,16 @@ class TilServiceImpl(
             tagEntity.increaseUsageCount()
         }
 
+        req.tilThumbnail?.let {
+            val (preSignedUrl, fileUrl) = preSignedUrl(it.fileName, it.contentType, til.id, THUMBNAIL, it.fileSize)
+
+            til.uploadTilThumbnail(fileUrl)
+
+            return CreateTilResponse(til.id!!, preSignedUrl)
+        }
+
         return CreateTilResponse(til.id!!)
+
     }
 
     override fun createImage(req: ImageFileRequest): TilContentImageResponse {
@@ -90,7 +99,7 @@ class TilServiceImpl(
         )
     }
 
-    private fun preSignedUrl(fileName: String, contentType: String, tilId: String? = null, type: String, fileSize: Long): Pair<PreSignedUrlResponse, String>{
+    private fun preSignedUrl(fileName: String, contentType: String, tilId: UUID? = null, type: String, fileSize: Long): Pair<PreSignedUrlResponse, String>{
 
         val file = s3Util.getPreSignedUrl(
             fileName,
