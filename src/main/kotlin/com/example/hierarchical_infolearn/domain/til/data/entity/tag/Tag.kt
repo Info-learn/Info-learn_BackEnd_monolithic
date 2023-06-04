@@ -18,7 +18,7 @@ class Tag(
     var usageCount: Long = 0
         protected set
 
-    @OneToMany
+    @OneToMany(mappedBy = "tag")
     var tagUsage: MutableList<TagUsage> = ArrayList()
         protected set
 
