@@ -1,5 +1,7 @@
 package com.example.hierarchical_infolearn.domain.til.business.dto.request
 
+import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
+import javax.validation.Valid
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
@@ -11,5 +13,7 @@ data class CreateTilRequest(
     val subTitle: String?,
     val content: String,
     val isPrivate: Boolean,
-    val tagNameList: HashSet<String>
+    val tagNameList: HashSet<String>,
+    @field:Valid
+    val tilThumbnail: ImageFileRequest?
 )
