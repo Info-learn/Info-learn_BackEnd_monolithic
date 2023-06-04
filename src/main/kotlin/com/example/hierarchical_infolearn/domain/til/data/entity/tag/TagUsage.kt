@@ -3,7 +3,6 @@ package com.example.hierarchical_infolearn.domain.til.data.entity.tag
 import com.example.hierarchical_infolearn.domain.til.data.entity.Til
 import com.example.hierarchical_infolearn.global.base.entity.BaseTimeEntity
 import org.springframework.data.domain.Persistable
-import java.io.Serializable
 import javax.persistence.*
 
 @Entity
@@ -12,7 +11,7 @@ import javax.persistence.*
 class TagUsage(
     tag: Tag,
     til: Til
-): BaseTimeEntity(), Persistable<String>, Serializable {
+): BaseTimeEntity(), Persistable<String> {
 
     @Id @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false, columnDefinition = "varchar(20) binary")
