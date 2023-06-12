@@ -99,7 +99,13 @@ class TilServiceImpl(
         )
     }
 
-    private fun preSignedUrl(fileName: String, contentType: String, tilId: UUID? = null, type: String, fileSize: Long): Pair<PreSignedUrlResponse, String>{
+    private fun preSignedUrl(
+        fileName: String,
+        contentType: String,
+        tilId: UUID? = null,
+        type: String,
+        fileSize: Long
+    ): Pair<PreSignedUrlResponse, String>{
 
         val file = s3Util.getPreSignedUrl(
             fileName,
