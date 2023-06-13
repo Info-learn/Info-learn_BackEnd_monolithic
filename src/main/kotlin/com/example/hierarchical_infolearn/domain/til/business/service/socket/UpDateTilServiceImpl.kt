@@ -3,14 +3,16 @@ package com.example.hierarchical_infolearn.domain.til.business.service.socket
 import com.corundumstudio.socketio.SocketIOClient
 import com.corundumstudio.socketio.SocketIOServer
 import com.example.hierarchical_infolearn.domain.til.business.dto.request.UpDateTilRequest
+import com.example.hierarchical_infolearn.domain.til.business.dto.response.TIlResponse
 import com.example.hierarchical_infolearn.domain.til.data.entity.Til
 import com.example.hierarchical_infolearn.domain.til.data.entity.socket.TilUser
 import com.example.hierarchical_infolearn.domain.til.data.repo.TilRepository
 import com.example.hierarchical_infolearn.domain.til.data.repo.TilUserRepository
 import com.example.hierarchical_infolearn.domain.til.exception.TilNotFound
 import com.example.hierarchical_infolearn.domain.til.exception.TilUserNotFound
+import com.example.hierarchical_infolearn.global.config.websocket.property.ClientProperties
+import com.example.hierarchical_infolearn.global.config.websocket.property.SocketProperties
 import com.example.hierarchical_infolearn.global.utils.CurrentUtil
-import com.example.hierarchical_infolearn.global.utils.SocketTilUtils
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -23,12 +25,6 @@ class UpDateTilServiceImpl(
     private val tilRepository: TilRepository,
     private val tilUserRepository: TilUserRepository
 ): UpDateTilService {
-
-    companion object {
-        private const val TIL_KEY = "til_key"
-
-        private const val TIL = "til"
-    }
 
     override fun execute(socketIOServer: SocketIOServer, socketIOClient: SocketIOClient, request: UpDateTilRequest) {
 
@@ -47,27 +43,21 @@ class UpDateTilServiceImpl(
             request.subTitle,
             request.isPrivate!!,
             request.content!!,
-            user!!
+            user
         ))
 
-//        socketIOServer
-//            .getRoomOperations(newTil.id.toString())
-//            .clients
-//            .forEach {
-//
-//                it.sendEvent(TIL, ChatResponse.of(TIL, it === socketIOClient))
-//
-//                val clientTilUser = tilUserRepository.findByIdOrNull(
-//                    TilUser.IdClass(currentUtil.getCurrentUser(it).accountId, newTil.id!!))
-//
-//                clientTilUser.updateLastReadTime()
-//            }
+        socketIOServer
+            .getRoomOperations(newTil.id.toString())
+            .clients
+            .forEach {
+                it.sendEvent(SocketProperties.TIL, TIlResponse.of(til, tilUser, user))
+            }
     }
 
     private fun getTilRoomId(socketIOClient: SocketIOClient): UUID {
-        if (!socketIOClient.has(TIL_KEY)) {
-            throw TilNotFound
-        }
-        return UUID.fromString(socketIOClient.get(TIL_KEY))
+
+        if (!socketIOClient.has(ClientProperties.TIL_KEY)) throw TilNotFound
+
+        return UUID.fromString(socketIOClient.get(ClientProperties.TIL_KEY))
     }
 }
