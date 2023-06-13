@@ -12,7 +12,7 @@ class AuthCode(
     type: CodeType,
 ) {
     @Id
-    val email: String = email
+    var email: String = email
 
     val code: String = code
 
