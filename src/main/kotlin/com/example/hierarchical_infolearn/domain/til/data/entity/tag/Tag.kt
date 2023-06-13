@@ -4,8 +4,7 @@ import com.example.hierarchical_infolearn.domain.lecture.data.entity.tag.TagUsag
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
 import javax.persistence.*
 
-@Entity(name = "tbl_til_tag")
-@Table(name = "tbl_til_tag")
+@Entity(name = "til_tag")
 class Tag(
     name: String,
 ): BaseAuthorEntity() {
