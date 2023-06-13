@@ -10,8 +10,8 @@ import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
 import javax.persistence.*
 
-@Entity(name = "tbl_video")
-@Table(name = "tbl_video")
+@Entity
+@Table(name = "video")
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE `tbl_video` SET is_deleted = true WHERE id = ?")
 class Video(

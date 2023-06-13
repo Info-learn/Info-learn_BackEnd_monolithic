@@ -5,8 +5,8 @@ import com.example.hierarchical_infolearn.domain.lecture.data.entity.video.Video
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
 import javax.persistence.*
 
-@Entity(name = "tbl_video_status")
-@Table(name = "tbl_video_status")
+@Entity
+@Table(name = "video_status")
 class VideoStatus(
     video: Video,
     statusType: VideoStatusType,
