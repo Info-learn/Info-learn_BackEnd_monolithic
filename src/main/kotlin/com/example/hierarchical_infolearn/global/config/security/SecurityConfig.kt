@@ -1,6 +1,7 @@
 package com.example.hierarchical_infolearn.global.config.security
 
 import com.example.hierarchical_infolearn.domain.user.data.entity.common.user.Role
+import com.example.hierarchical_infolearn.global.config.security.jwt.JwtResolver
 import com.example.hierarchical_infolearn.global.config.security.jwt.TokenProvider
 import com.example.hierarchical_infolearn.global.config.security.jwt.auth.StudentDetailsService
 import com.example.hierarchical_infolearn.global.config.security.jwt.auth.TeacherDetailsService
@@ -24,6 +25,7 @@ import org.springframework.web.cors.CorsUtils
 @EnableWebSecurity
 class SecurityConfig(
     private val tokenProvider: TokenProvider,
+    private val jwtResolver: JwtResolver,
     private val studentDetails: StudentDetailsService,
     private val teacherDetails: TeacherDetailsService,
     private val objectMapper: ObjectMapper
@@ -105,7 +107,7 @@ class SecurityConfig(
             .anyRequest().denyAll()
 
             .and()
-            .apply(FilterConfig(tokenProvider, studentDetails, teacherDetails ,objectMapper))
+            .apply(FilterConfig(tokenProvider, jwtResolver, studentDetails, teacherDetails ,objectMapper))
             .and().build()
     }
 }
