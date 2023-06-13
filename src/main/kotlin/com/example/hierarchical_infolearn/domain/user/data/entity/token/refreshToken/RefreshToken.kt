@@ -10,7 +10,7 @@ class RefreshToken(
     token: String,
 ) {
     @Id
-    val id = id
+    var id = id
 
     var token = token
         protected set

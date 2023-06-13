@@ -6,6 +6,7 @@ spring:
     database: ${DB}
     hibernate:
       ddl-auto: ${DDL_AUTO:update}
+    generate-ddl: true
     database-platform: ${DB_PLATFORM}
     properties:
       hibernate:
@@ -27,7 +28,7 @@ spring:
 
 datasource:
   mongo:
-    url:
+    url: ${MONGO_URL}
 
 jwt:
   secretKey: ${JWT_SECRET_KEY}

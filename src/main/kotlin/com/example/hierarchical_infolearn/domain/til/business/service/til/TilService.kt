@@ -6,7 +6,9 @@ import com.example.hierarchical_infolearn.domain.til.business.dto.response.TilCo
 import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
 
 interface TilService {
+
     fun createTil(req: CreateTilRequest): CreateTilResponse
+
     fun createImage(req: ImageFileRequest): TilContentImageResponse
 
 }

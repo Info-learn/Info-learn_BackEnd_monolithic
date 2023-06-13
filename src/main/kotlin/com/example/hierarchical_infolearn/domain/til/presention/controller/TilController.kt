@@ -1,6 +1,7 @@
 package com.example.hierarchical_infolearn.domain.til.presention.controller
 
 import com.example.hierarchical_infolearn.domain.til.business.dto.request.CreateTilRequest
+import com.example.hierarchical_infolearn.domain.til.business.dto.response.CreateTilResponse
 import com.example.hierarchical_infolearn.domain.til.business.dto.response.TilContentImageResponse
 import com.example.hierarchical_infolearn.domain.til.business.service.til.TilService
 import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
@@ -28,7 +29,7 @@ class TilController(
             ApiResponse(
                 responseCode = "201",
                 description = "til이 성공적으로 생성됨",
-                content = [Content(schema = Schema(implementation = PreSignedUrlResponse::class))])]
+                content = [Content(schema = Schema(implementation = CreateTilResponse::class))])]
     )
     fun createTil(
         @RequestBody

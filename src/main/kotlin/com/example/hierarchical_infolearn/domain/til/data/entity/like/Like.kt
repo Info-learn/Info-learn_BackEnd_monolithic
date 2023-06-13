@@ -4,8 +4,8 @@ import com.example.hierarchical_infolearn.domain.til.data.entity.Til
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
 import javax.persistence.*
 
-@Entity(name = "tbl_like")
-@Table(name = "tbl_like")
+@Entity
+@Table(name = "likes")
 class Like(
     til: Til,
 ): BaseAuthorEntity() {

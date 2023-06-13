@@ -5,22 +5,21 @@ import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.t
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
 import javax.persistence.*
 
-@Entity(name = "tbl_lecture_tag")
-@Table(name = "tbl_lecture_tag")
+@Entity(name = "lecture_tag")
 class Tag(
     name: String,
 ): BaseAuthorEntity() {
 
     @Id
-    @Column(nullable = false, length = 20, unique = true, columnDefinition = "varchar(20) binary")
+    @Column(name = "id", nullable = false, length = 20, unique = true, columnDefinition = "varchar(20) binary")
     val id: String = name
 
     @Column(name = "usage_count", nullable = false, unique = false)
     var usageCount: Long = 0
         protected set
 
-    @OneToMany
-    var tagUsage: MutableList<TagUsage> = ArrayList()
+    @OneToMany(mappedBy = "tag", cascade = [CascadeType.REMOVE])
+    var tagUsage: MutableSet<TagUsage> = HashSet()
         protected set
 
     fun toTagNameResponse(): TagNameResponse {

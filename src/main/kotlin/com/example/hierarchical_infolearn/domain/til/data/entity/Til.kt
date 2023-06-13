@@ -2,18 +2,18 @@ package com.example.hierarchical_infolearn.domain.til.data.entity
 
 import com.example.hierarchical_infolearn.domain.til.data.entity.comment.Comment
 import com.example.hierarchical_infolearn.domain.til.data.entity.like.Like
+import com.example.hierarchical_infolearn.domain.til.data.entity.socket.TilUser
 import com.example.hierarchical_infolearn.domain.til.data.entity.tag.TagUsage
 import com.example.hierarchical_infolearn.domain.user.data.entity.User
 import com.example.hierarchical_infolearn.global.base.entity.BaseTimeEntity
-import org.bson.types.ObjectId
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
-import java.util.UUID
+import java.util.*
 import javax.persistence.*
 
 
-@Entity(name = "tbl_til")
-@Table(name = "tbl_til", indexes = [Index(name = "i_search_title", columnList = "search_title")])
+@Entity
+@Table(name = "til", indexes = [Index(name = "i_search_title", columnList = "search_title")])
 @SQLDelete(sql = "UPDATE `tbl_til` SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false AND is_private = false")
 class Til(
@@ -22,7 +22,7 @@ class Til(
     searchTitle: String,
     subTitle: String?,
     isPrivate: Boolean,
-    tilContent: ObjectId,
+    tilContent: String,
     user: User,
 ): BaseTimeEntity() {
 
@@ -42,8 +42,8 @@ class Til(
     var subTitle: String? = subTitle
         protected set
 
-    @Column(name = "content_id", length = 50, nullable = false, unique = true)
-    var contentId: ObjectId = tilContent
+    @Column(name = "content_id", length = 50, nullable = false, unique = true, columnDefinition = "CHAR(24)")
+    var contentId: String = tilContent
         protected set
 
     @Column(name = "til_thumbnail_url", length = 255, nullable = true, unique = false)
@@ -70,12 +70,19 @@ class Til(
     var comments: MutableSet<Comment> = HashSet()
         protected set
 
-
     @OneToMany(mappedBy = "til", orphanRemoval = true)
     var tagUsageList: MutableSet<TagUsage> = HashSet()
         protected set
 
-   fun uploadTilThumbnail(url: String) {
-       this.tilThumbnail = url
-   }
+    @OneToMany(mappedBy = "til", cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER)
+    var tilUserList: MutableList<TilUser> = arrayListOf()
+        protected set
+
+    fun addTilUser(tilUser: TilUser) {
+        this.tilUserList.add(tilUser)
+    }
+
+    fun uploadTilThumbnail(url: String) {
+        this.tilThumbnail = url
+    }
 }

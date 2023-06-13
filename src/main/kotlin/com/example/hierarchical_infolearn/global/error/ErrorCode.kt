@@ -49,6 +49,7 @@ enum class ErrorCode(
 
     //TIL
     TIL_NOT_FOUND("Til Not Found", HttpStatus.NOT_FOUND),
+    TIL_USER_NOT_FOUND("Til User Not Found", HttpStatus.NOT_FOUND),
 
     //GLOBAL
     INTERNAL_SERVER_ERROR("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR)

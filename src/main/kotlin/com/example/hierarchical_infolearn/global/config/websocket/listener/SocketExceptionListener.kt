@@ -1,14 +1,11 @@
-package com.example.websocketdemo.global.config.websocket.listener
+package com.example.hierarchical_infolearn.global.config.websocket.listener
 
 import com.corundumstudio.socketio.SocketIOClient
 import com.corundumstudio.socketio.listener.ExceptionListener
 import com.example.hierarchical_infolearn.global.error.ErrorCode
-import com.example.hierarchical_infolearn.global.error.data.BindErrorResponse
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
 import com.example.hierarchical_infolearn.global.error.data.GlobalException
 import io.netty.channel.ChannelHandlerContext
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.BindException
 

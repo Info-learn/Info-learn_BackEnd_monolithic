@@ -2,7 +2,7 @@ package com.example.hierarchical_infolearn.global.config.websocket
 
 import com.corundumstudio.socketio.SocketIOServer
 import com.corundumstudio.socketio.annotation.SpringAnnotationScanner
-import com.example.websocketdemo.global.config.websocket.listener.SocketExceptionListener
+import com.example.hierarchical_infolearn.global.config.websocket.listener.SocketExceptionListener
 import com.example.hierarchical_infolearn.global.config.websocket.property.SocketProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
