@@ -4,8 +4,8 @@ import com.example.hierarchical_infolearn.domain.til.data.entity.Til
 import com.example.hierarchical_infolearn.global.base.entity.BaseAuthorEntity
 import javax.persistence.*
 
-@Entity(name = "tbl_comment")
-@Table(name = "tbl_comment")
+@Entity
+@Table(name = "comment")
 class Comment(
     til: Til,
     content: String
