@@ -8,10 +8,11 @@ import java.util.*
 import javax.persistence.*
 
 @IdClass(TilUser.IdClass::class)
-@Entity(name = "room_user")
+@Entity(name = "til_user")
 class TilUser(
     user: User,
     til: Til,
+    role: Role = Role.OWNER
 ): Persistable<TilUser.IdClass> {
 
     @Id
@@ -22,8 +23,13 @@ class TilUser(
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "room", nullable = false)
+    @JoinColumn(name = "til", nullable = false, columnDefinition = "BINARY(16)")
     var til: Til = til
+        protected set
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, columnDefinition = "CHAR(11)")
+    var role: Role = role
         protected set
 
     data class IdClass(
