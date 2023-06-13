@@ -59,11 +59,7 @@ class LectureServiceImpl(
 
         req.tagNameList.forEach {
 
-            val tagEntity = lectureTagRepository.findByIdOrNull(it) ?: lectureTagRepository.save(
-                Tag(
-                    it
-                )
-            )
+            val tagEntity = lectureTagRepository.findByIdOrNull(it) ?: lectureTagRepository.save(Tag(it))
 
             lectureTagUsageRepository.save(
                 TagUsage(
