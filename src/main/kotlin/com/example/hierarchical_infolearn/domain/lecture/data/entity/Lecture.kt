@@ -10,8 +10,8 @@ import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
 import javax.persistence.*
 
-@Entity(name = "tbl_lecture")
-@Table(name = "tbl_lecture", indexes = [
+@Entity
+@Table(name = "lecture", indexes = [
     Index(name = "i_search_title", columnList = "search_title"),
     Index(name = "i_search_explanation", columnList = "search_explanation")
     ])
