@@ -2,6 +2,7 @@ package com.example.hierarchical_infolearn.global.config.websocket.listener
 
 import com.corundumstudio.socketio.SocketIOClient
 import com.corundumstudio.socketio.listener.ExceptionListener
+import com.example.hierarchical_infolearn.global.config.websocket.property.SocketProperties
 import com.example.hierarchical_infolearn.global.error.ErrorCode
 import com.example.hierarchical_infolearn.global.error.data.ErrorResponse
 import com.example.hierarchical_infolearn.global.error.data.GlobalException
@@ -42,7 +43,7 @@ class SocketExceptionListener: ExceptionListener {
 
         e.cause?.printStackTrace()
 
-        client.sendEvent("ERROR", response)
+        client.sendEvent(SocketProperties.ERROR, response)
     }
 
 }
