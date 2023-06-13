@@ -9,24 +9,34 @@ import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Component
+@Transactional(readOnly = true)
 class TokenProvider(
-    private val jwtProperty: JwtProperty,
+    private val jwtProperty: JwtProperty
 ) {
+
+    companion object {
+        const val TYPE = "type"
+        const val ACCESS = "access"
+        const val REFRESH = "refresh"
+    }
+
+    @Transactional
     fun encode(accountId: String, role: String, tokenUUID: String): TokenResponse {
         val accessToken = Jwts.builder()
             .signWith(SignatureAlgorithm.HS256, jwtProperty.secretKey)
             .setSubject(role)
             .setId(accountId)
-            .claim("type", "access")
+            .claim(TYPE, ACCESS)
             .setIssuedAt(Date())
             .setExpiration(Date(Date().time + (jwtProperty.accessExpiredAt * 1000)))
             .compact() /*+ ".${tokenUUID}"*/
         val refreshToken = Jwts.builder()
             .signWith(SignatureAlgorithm.HS256, jwtProperty.secretKey)
-            .claim("type", "refresh")
+            .claim(TYPE, REFRESH)
             .setIssuedAt(Date())
             .setExpiration(Date(Date().time + (jwtProperty.refreshExpiredAt * 1000)))
             .compact()
