@@ -7,6 +7,7 @@ import com.example.hierarchical_infolearn.domain.til.business.dto.request.JoinSo
 import com.example.hierarchical_infolearn.domain.til.business.dto.request.UpDateTilRequest
 import com.example.hierarchical_infolearn.domain.til.business.service.socket.UpDateTilService
 import com.example.hierarchical_infolearn.domain.til.business.service.socket.JoinSocketTilService
+import com.example.hierarchical_infolearn.global.config.websocket.property.SocketProperties
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -19,25 +20,18 @@ class TilSocketController(
     private val joinSocketTilService: JoinSocketTilService,
     private val upDateTilService: UpDateTilService
 ) {
-    companion object {
 
-        private const val JOIN = "join"
-
-        private const val TIL = "til"
-
+    @OnEvent(SocketProperties.TIL)
+    fun updateTil(
+        socketIOClient: SocketIOClient,
+        @Valid @RequestBody
+        request: UpDateTilRequest
+    ) {
+        upDateTilService.execute(socketIOServer, socketIOClient, request)
     }
 
-//    @OnEvent(TIL)
-//    fun sendChat(
-//        socketIOClient: SocketIOClient,
-//        @Valid @RequestBody
-//        request: UpDateTilRequest
-//    ) {
-//        upDateTilService.execute(socketIOServer, socketIOClient, request)
-//    }
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @OnEvent(JOIN)
+    @OnEvent(SocketProperties.JOIN)
     fun enterTil(
         socketIOClient: SocketIOClient,
         @Valid @RequestBody
