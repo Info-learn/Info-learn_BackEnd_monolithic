@@ -2,7 +2,6 @@ package com.example.hierarchical_infolearn.domain.lecture.business.dto.response.
 
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.chapter.ChapterDetailResponse
 import com.example.hierarchical_infolearn.domain.lecture.business.dto.response.tag.TagNameResponse
-import java.util.UUID
 
 data class MaxLectureResponse(
     val lectureId: String,
@@ -10,5 +9,5 @@ data class MaxLectureResponse(
     val explanation: String,
     val lectureThumbnailUrl: String,
     val tagNameList: Set<TagNameResponse>?,
-    val chapters: Set<ChapterDetailResponse>?
+    val chapters: List<ChapterDetailResponse>
 )

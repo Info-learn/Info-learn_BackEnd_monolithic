@@ -6,5 +6,5 @@ data class ChapterDetailResponse(
     val chapterId: Long,
     val title: String,
     val sequence: Int,
-    val videos: Set<VideoDetailResponse?>
+    val videos: List<VideoDetailResponse>
 )

@@ -13,7 +13,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "chapter")
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE `tbl_chapter` SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE `chapter` SET is_deleted = true WHERE id = ?")
 class Chapter(
     title: String,
     sequence: Int,
@@ -53,7 +53,7 @@ class Chapter(
             }.let {
                 it.map { it1 -> it1.toVideoDetailResponse(userId)
                 }
-            }.toSet()
+            }.sortedBy { it.sequence }
         )
     }
 

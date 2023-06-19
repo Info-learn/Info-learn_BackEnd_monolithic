@@ -31,7 +31,9 @@ class ChapterServiceImpl(
 
         lectureEntity.chapters.firstOrNull{
             !it.isDeleted && it.sequence == req.sequence
-        } ?: throw AlreadyUsingSequence
+        } ?.let{
+            throw AlreadyUsingSequence
+        }
 
         chapterRepository.save(
             Chapter(
