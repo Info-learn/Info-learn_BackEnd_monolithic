@@ -9,6 +9,7 @@ import javax.persistence.*
 
 @IdClass(TilUser.IdClass::class)
 @Entity(name = "til_user")
+@NamedEntityGraph(name = "TilUser.user", attributeNodes = [NamedAttributeNode("user")])
 class TilUser(
     user: User,
     til: Til,
@@ -16,8 +17,8 @@ class TilUser(
 ): Persistable<TilUser.IdClass> {
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user", nullable = false, columnDefinition = "VARCHAR(50)")
     var user: User = user
         protected set
 

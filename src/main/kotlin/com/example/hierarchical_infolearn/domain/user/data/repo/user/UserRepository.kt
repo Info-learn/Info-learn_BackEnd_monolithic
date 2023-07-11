@@ -5,7 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserRepository: JpaRepository<User, String> {
 
-    fun existsByAccountId(accountId: String): Boolean
-
     fun existsByEmail(email: String): Boolean
 }

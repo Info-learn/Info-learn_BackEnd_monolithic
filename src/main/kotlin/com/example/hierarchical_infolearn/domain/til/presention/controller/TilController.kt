@@ -5,7 +5,6 @@ import com.example.hierarchical_infolearn.domain.til.business.dto.response.Creat
 import com.example.hierarchical_infolearn.domain.til.business.dto.response.TilContentImageResponse
 import com.example.hierarchical_infolearn.domain.til.business.service.til.TilService
 import com.example.hierarchical_infolearn.global.file.dto.ImageFileRequest
-import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

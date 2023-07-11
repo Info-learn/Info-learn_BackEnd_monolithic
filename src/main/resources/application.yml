@@ -63,3 +63,4 @@ logging:
 
 socket:
   port: ${SOCKET_PORT:3000}
+  host: ${SOCKET_HOST:127.0.0.1}

@@ -28,9 +28,9 @@ class CurrentUtil(
         return userRepository.findByIdOrNull(subject)?: throw UserNotFoundException
     }
 
-    fun getCurrentUser(socketIOClient: SocketIOClient) = getUserByAccountId(
-        jwtProvider.getSubjectWithExpiredCheck(jwtResolver.resolveToken(socketIOClient)).second
+    fun getCurrentUser(socketIOClient: SocketIOClient) = userRepository.findByIdOrNull(
+        jwtProvider.getSubjectWithExpiredCheck(
+            jwtResolver.resolveToken(socketIOClient)
+        ).second
     ) ?: throw NoAuthenticationException
-
-    fun getUserByAccountId(accountId: String) = userRepository.findByIdOrNull(accountId)
 }
