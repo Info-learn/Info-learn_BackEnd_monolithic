@@ -13,7 +13,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "video")
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE `tbl_video` SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE `video` SET is_deleted = true WHERE id = ?")
 class Video(
     title: String,
     playTime : Int,

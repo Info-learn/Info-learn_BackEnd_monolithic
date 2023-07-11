@@ -36,7 +36,9 @@ class VideoServiceImpl(
 
         chapterEntity.videos.firstOrNull{
             !it.isDeleted && it.sequence == req.sequence
-        } ?: throw AlreadyUsingSequence
+        }?.let {
+            throw AlreadyUsingSequence
+        }
 
         val videoEntity = videoRepository.save(
             Video(
@@ -50,9 +52,7 @@ class VideoServiceImpl(
 
         val (preSignedUrl, fileUrl) = preSignedUrl(req.videoUrl.fileName, req.videoUrl.contentType, chapterEntity.lecture.id ,chapterId, videoEntity.id!!, req.videoUrl.fileSize)
 
-        println("test1 : $fileUrl")
         videoEntity.uploadVideoUrl(fileUrl)
-        println("test2 : ${videoEntity.videoUrl}")
        return preSignedUrl
 
     }

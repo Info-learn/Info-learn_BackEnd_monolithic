@@ -16,7 +16,7 @@ import javax.persistence.*
     Index(name = "i_search_explanation", columnList = "search_explanation")
     ])
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE `tbl_lecture` SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE `lecture` SET is_deleted = true WHERE id = ?")
 class Lecture(
     id: String,
     title: String,
@@ -74,7 +74,7 @@ class Lecture(
                     !it1.isDeleted
                 }.map { it1 -> it1.toChapterDetailResponse(userId)
                 }
-            }.toSet(),
+            }.sortedBy { it.sequence },
             tagNameList = tagUsageList.map {
                 it.tag.toTagNameResponse()
             }.toSet()

@@ -14,7 +14,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "til", indexes = [Index(name = "i_search_title", columnList = "search_title")])
-@SQLDelete(sql = "UPDATE `tbl_til` SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE `til` SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
 class Til(
     id: UUID? = null,
