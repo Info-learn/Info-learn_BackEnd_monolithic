@@ -14,16 +14,18 @@ import com.example.hierarchical_infolearn.domain.user.data.repo.user.StudentRepo
 import com.example.hierarchical_infolearn.domain.user.data.repo.user.TeacherRepository
 import com.example.hierarchical_infolearn.domain.user.data.repo.user.UserRepository
 import com.example.hierarchical_infolearn.domain.user.exception.*
-import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
 import com.example.hierarchical_infolearn.global.config.security.jwt.TokenProvider
 import com.example.hierarchical_infolearn.global.config.security.jwt.data.TokenResponse
+import com.example.hierarchical_infolearn.global.file.dto.PreSignedUrlResponse
 import com.example.hierarchical_infolearn.infra.s3.S3Util
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
+@Transactional(readOnly = true)
 class AuthServiceImpl(
     private val userRepository: UserRepository,
     private val studentRepository: StudentRepository,
@@ -44,6 +46,7 @@ class AuthServiceImpl(
         if(checkEmail.code != authCode) throw IncorrectAuthCode
     }
 
+    @Transactional
     override fun studentSignUp(req: StudentSignUpRequest): PreSignedUrlResponse? {
         checkAccountId(req.accountId)
         checkAuthCodeAndDelete(req.email, req.authCode)
@@ -56,7 +59,7 @@ class AuthServiceImpl(
             email = req.email,
             password = encPw
         )
-        val studentEntity = studentRepository.save(student)
+        val studentEntity = studentRepository.saveAndFlush(student)
 
         req.profileImage?.let {
 
@@ -70,6 +73,7 @@ class AuthServiceImpl(
         return null
     }
 
+    @Transactional
     override fun teacherSignUp(req: TeacherSignUpRequest): PreSignedUrlResponse? {
         checkAccountId(req.accountId)
         checkAuthCodeAndDelete(req.email, req.authCode)
@@ -129,16 +133,22 @@ class AuthServiceImpl(
     }
 
     private fun checkAccountId(accountId: String) {
-        val isDuplicate = userRepository.existsByAccountId(accountId)
+        val isDuplicate = userRepository.existsById(accountId)
         if(isDuplicate) throw AccountIdAlreadyExists
     }
 
+    @Transactional
     override fun signIn(req: SignInRequest): TokenResponse {
-        val user = userRepository.findByIdOrNull(req.accountId) ?: throw UserNotFoundException
+
+        val user = userRepository.findByIdOrNull(req.accountId)
+
+        user ?: throw UserNotFoundException
 
         if(!passwordEncoder.matches(req.password, user.password)) throw IncorrectPassword
+
         val tokenUUID = UUID.randomUUID().toString()
         val response = tokenProvider.encode(user.accountId, user.role.name, tokenUUID)
+
         refreshTokenRepository.findByIdOrNull(user.accountId)?.reset(response.refreshToken)
             ?: RefreshToken(
                 user.accountId,

@@ -6,5 +6,6 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConstructorBinding
 @ConfigurationProperties(prefix = "socket")
 data class SocketProperty(
-    val port: Int
+    val port: Int,
+    val host: String
 )

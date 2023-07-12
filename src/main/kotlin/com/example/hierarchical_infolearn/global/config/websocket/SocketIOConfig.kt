@@ -1,15 +1,15 @@
 package com.example.hierarchical_infolearn.global.config.websocket
 
+import com.corundumstudio.socketio.SocketConfig
 import com.corundumstudio.socketio.SocketIOServer
 import com.corundumstudio.socketio.annotation.SpringAnnotationScanner
-import com.example.hierarchical_infolearn.global.config.websocket.listener.SocketExceptionListener
+import com.corundumstudio.socketio.protocol.JacksonJsonSupport
 import com.example.hierarchical_infolearn.global.config.websocket.property.SocketProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import com.corundumstudio.socketio.SocketConfig
 
 @Configuration
-class WebSocketConfig(
+class SocketIOConfig(
     private val property: SocketProperty
 ) {
 
@@ -19,16 +19,16 @@ class WebSocketConfig(
         val socketConfig = SocketConfig()
         socketConfig.isReuseAddress = true
 
-        val configuration = com.corundumstudio.socketio.Configuration()
+        val config = com.corundumstudio.socketio.Configuration()
 
-        configuration.let {
+        config.let {
+            it.hostname = property.host
             it.port = property.port
-            it.origin = "*";
-            it.socketConfig = socketConfig;
-            it.exceptionListener = SocketExceptionListener()
+            it.socketConfig = socketConfig
+            it.jsonSupport = JacksonJsonSupport()
         }
 
-        return SocketIOServer(configuration);
+        return SocketIOServer(config)
     }
 
     @Bean

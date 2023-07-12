@@ -48,6 +48,7 @@ enum class ErrorCode(
     INCORRECT_VIDEO("Incorrect Video", HttpStatus.BAD_REQUEST),
 
     //TIL
+    TIL_KEY_NOT_FOUND("Til Key Not Found", HttpStatus.NOT_FOUND),
     TIL_NOT_FOUND("Til Not Found", HttpStatus.NOT_FOUND),
     TIL_USER_NOT_FOUND("Til User Not Found", HttpStatus.NOT_FOUND),
 

@@ -18,10 +18,6 @@ class JwtFilter(
     private val jwtResolver: JwtResolver
 ): OncePerRequestFilter() {
 
-    companion object {
-        const val AUTH = "Authorization"
-    }
-
     @Suppress("IMPLICIT_CAST_TO_ANY")
     override fun doFilterInternal(
         request: HttpServletRequest,

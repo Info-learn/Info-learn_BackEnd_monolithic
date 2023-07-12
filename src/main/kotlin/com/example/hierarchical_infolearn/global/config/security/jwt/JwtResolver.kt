@@ -11,13 +11,14 @@ import javax.servlet.http.HttpServletRequest
 class JwtResolver {
 
     companion object {
-        const val BEARER = "Bearer "
-        const val AUTH = "auth"
-        const val REGEX = "[(a-zA-Z0-9-._~+/=*)]{30,600}"
+        private const val BEARER = "Bearer "
+        private const val AUTH = "auth"
+        private const val AUTHORIZATION = "Authorization"
+        private const val REGEX = "[(a-zA-Z0-9-._~+/=*)]{30,600}"
     }
 
     fun getToken(request: HttpServletRequest): String? {
-        val bearerToken = request.getHeader(JwtFilter.AUTH) ?: return null
+        val bearerToken = request.getHeader(AUTHORIZATION) ?: return null
         if (bearerToken.startsWith(BEARER)) {
             return bearerToken.substring(7)
         }
